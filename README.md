@@ -1,2 +1,0 @@
-# Parral-Map
-Mapa informativo
