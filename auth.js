@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 // Función para cambiar entre Login y Registro
 function mostrarRegistro() {
     document.getElementById("login-form").style.display = "none";
@@ -104,7 +103,6 @@ function logout() {
     localStorage.removeItem("usuario_actual"); // Elimina el usuario de la sesión
     window.location.href = "index.html"; // Redirige a la página de inicio
 };
-=======
 // Función para cambiar entre Login y Registro
 function mostrarRegistro() {
     document.getElementById("login-form").style.display = "none";
@@ -210,4 +208,3 @@ function logout() {
     localStorage.removeItem("usuario_actual"); // Elimina el usuario de la sesión
     window.location.href = "index.html"; // Redirige a la página de inicio
 };
->>>>>>> 11f0a8f3865b442d27fc42501401579e4532227b

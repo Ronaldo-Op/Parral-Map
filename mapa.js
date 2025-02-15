@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 let mapa;
 let calles = {}; // Almacena todas las secciones de cada calle con su nombre
 let colores = ["#0000FF", "#FF0000", "#00FF00", "#FFFF00", "#00FFFF"]; // Azul, Rojo, Verde, Amarillo
@@ -105,7 +104,6 @@ function cambiarColorCalle(nombreCalle) {
 
 window.onload = iniciarMapa;
 
-=======
 let mapa;
 let calles = {}; // Almacena todas las secciones de cada calle con su nombre
 let colores = ["#0000FF", "#FF0000", "#00FF00", "#FFFF00", "#00FFFF"]; // Azul, Rojo, Verde, Amarillo
@@ -212,4 +210,3 @@ function cambiarColorCalle(nombreCalle) {
 
 window.onload = iniciarMapa;
 
->>>>>>> 11f0a8f3865b442d27fc42501401579e4532227b
