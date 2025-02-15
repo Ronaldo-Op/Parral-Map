@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inicio</title>
+    <link rel="stylesheet" href="Inicio_styles.css">
+
+</head>
+<body>
+
+    <div class="inicio-container">
+        <h1>Hidalgo Del Parral</h1>
+        <p>Explora y visualiza información relevante de la capital del mundo.</p>
+
+            <!-- Formulario de Inicio de Sesión -->
+        <div id="login-form">
+            <h2>Iniciar Sesión</h2>
+            <input type="text" id="login-username" placeholder="Usuario" required>
+            <input type="password" id="login-password" placeholder="Contraseña" required>
+            <button onclick="login()">Ingresar</button>
+            <p>¿No tienes cuenta? <a href="#" onclick="mostrarRegistro()">Regístrate aquí</a></p>
+        </div>
+
+            <!-- Formulario de Registro -->
+        <div id="register-form" style="display: none;">
+            <h2>Registro</h2>
+            <input type="text" id="register-username" placeholder="Usuario" required>
+            <input type="password" id="register-password" placeholder="Contraseña" required>
+            <label>
+                <input type="checkbox" id="register-admin"> Registrarme como Administrador
+            </label>
+            <button onclick="registrar()">Registrarse</button>
+            <p>¿Ya tienes cuenta? <a href="#" onclick="mostrarLogin()">Inicia sesión aquí</a></p>
+        </div>
+    </div>
+
+    <script src="auth.js"></script>
+
+</body>
+</html>
