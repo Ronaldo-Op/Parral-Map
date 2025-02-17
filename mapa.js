@@ -166,6 +166,30 @@ function cambiarColorCalle(nombreCalle) {
     }
 }
 
+// 🔥 Habilitar Realtime sin recargar la página
+function habilitarRealtime() {
+    supabase
+        .channel("public:calles")
+        .on("postgres_changes", { event: "UPDATE", schema: "public", table: "calles" }, (payload) => {
+            console.log("📌 Cambio en Supabase detectado:", payload);
+            
+            let nombreCalle = payload.new.nombre;
+            let nuevoColor = payload.new.color;
+
+            // Aplicar el cambio solo a la calle que se modificó
+            if (calles[nombreCalle]) {
+                calles[nombreCalle].colorIndex = colores.indexOf(nuevoColor);
+
+                // Cambiar el color en todas las secciones de la calle
+                calles[nombreCalle].polilineas.forEach(polilinea => {
+                    polilinea.setOptions({ strokeColor: nuevoColor });
+                });
+
+                console.log(`✅ Color de ${nombreCalle} actualizado en el mapa a ${nuevoColor}`);
+            }
+        })
+        .subscribe();
+}
 
 
 window.onload = iniciarMapa;
