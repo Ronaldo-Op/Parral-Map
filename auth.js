@@ -23,7 +23,7 @@ function validarPassword(password) {
     return regex.test(password);
 }
 
-let intentosFallidos = 0; // Para bloquear múltiples intentos fallidos
+// let intentosFallidos = 0; // Para bloquear múltiples intentos fallidos
 
 // Función para registrar usuario con validaciones
 document.getElementById("register-btn").addEventListener("click", async () => {
@@ -72,7 +72,7 @@ document.getElementById("login-btn").addEventListener("click", async () => {
         }, 2000);
     }
 });
-
+/*
 // Mantener sesión iniciada
 async function verificarSesion() {
     const { data } = await supabase.auth.getSession();
