@@ -78,6 +78,7 @@ async function verificarSesion() {
     const { data } = await supabase.auth.getSession();
     if (data.session) {
         window.location.href = "mapa.html";
+        document.getElementById("logout-btn").style.display = "block";
     }
 }
 
