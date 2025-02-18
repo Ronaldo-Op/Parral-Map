@@ -1,10 +1,13 @@
 body {
     font-family: Arial, sans-serif;
-    background: #f4f4f4;
-    text-align: center;
     margin: 0;
-    background-image: url('fondo.jpg');
     padding: 0;
+    background-color: #f4f4f4;
+    position: relative; /* Asegura que el menú se superponga */
+    background-image: url('fondo.jpg'); /* Imagen de fondo */
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
 }
 
 .container {
