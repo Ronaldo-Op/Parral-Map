@@ -120,4 +120,4 @@ document.getElementById("logout-btn").addEventListener("click", async () => {
     } else {
         alert("❌ Error al cerrar sesión: " + error.message);
     }
-});
+}); */
