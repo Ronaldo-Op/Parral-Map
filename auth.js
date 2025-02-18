@@ -100,3 +100,24 @@ document.getElementById("forgot-password").addEventListener("click", async () =>
         alert("✅ Correo de recuperación enviado.");
     }
 });
+
+// Verificar si el usuario está autenticado y mostrar botón de cerrar sesión
+async function verificarSesion() {
+    const { data } = await supabase.auth.getSession();
+    if (data.session) {
+        document.getElementById("logout-btn").style.display = "block";
+    }
+}
+
+verificarSesion();
+
+// 🔥 Función para cerrar sesión
+document.getElementById("logout-btn").addEventListener("click", async () => {
+    let { error } = await supabase.auth.signOut();
+
+    if (!error) {
+        window.location.href = "index.html"; // Redirigir a la página de inicio
+    } else {
+        alert("❌ Error al cerrar sesión: " + error.message);
+    }
+});
