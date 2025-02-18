@@ -100,16 +100,6 @@ document.getElementById("forgot-password").addEventListener("click", async () =>
         alert("✅ Correo de recuperación enviado.");
     }
 });
-/*
-// Verificar si el usuario está autenticado y mostrar botón de cerrar sesión
-async function verificarSesion() {
-    const { data } = await supabase.auth.getSession();
-    if (data.session) {
-        document.getElementById("logout-btn").style.display = "block";
-    }
-}
-
-verificarSesion();
 
 // 🔥 Función para cerrar sesión
 document.getElementById("logout-btn").addEventListener("click", async () => {
@@ -120,4 +110,4 @@ document.getElementById("logout-btn").addEventListener("click", async () => {
     } else {
         alert("❌ Error al cerrar sesión: " + error.message);
     }
-}); */
+});
