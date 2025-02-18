@@ -73,29 +73,22 @@ document.getElementById("login-btn").addEventListener("click", async () => {
     }
 });
 
-// 🔥 Función para cerrar sesión
-document.getElementById("logout-btn").addEventListener("click", async () => {
-    let { error } = await supabase.auth.signOut();
-
-    if (!error) {
-        window.location.href = "index.html"; // Redirigir a la página de inicio
-    } else {
-        alert("❌ Error al cerrar sesión: " + error.message);
-    }
-});
-
-/* Mantener sesión iniciada
+// Mantener sesión iniciada
 async function verificarSesion() {
-    const { data } = await supabase.auth.getSession();
-    if (data.session) {
-        window.location.href = "mapa.html";
+    const { data, error } = await supabase.auth.getSession();
+    if (error) {
+        console.error("❌ Error al verificar sesión:", error);
+        return;
     }
-    if (data.session) {
+    
+    if (data.session && data.session.user) {
         document.getElementById("logout-btn").style.display = "block";
+    } else {
+        document.getElementById("logout-btn").style.display = "none";
     }
-} */
+}
 
-verificarSesion();
+document.addEventListener("DOMContentLoaded", verificarSesion);
 
 // Recuperar contraseña
 document.getElementById("forgot-password").addEventListener("click", async () => {
@@ -112,5 +105,16 @@ document.getElementById("forgot-password").addEventListener("click", async () =>
         alert("❌ Error al enviar el correo de recuperación: " + error.message);
     } else {
         alert("✅ Correo de recuperación enviado.");
+    }
+});
+
+// 🔥 Función para cerrar sesión
+document.getElementById("logout-btn").addEventListener("click", async () => {
+    let { error } = await supabase.auth.signOut();
+
+    if (!error) {
+        window.location.href = "index.html"; // Redirigir a la página de inicio
+    } else {
+        alert("❌ Error al cerrar sesión: " + error.message);
     }
 });
