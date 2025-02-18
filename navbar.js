@@ -18,7 +18,7 @@ async function verificarSesion() {
     } else {
         authBtn.innerText = "Iniciar Sesión";
         authBtn.addEventListener("click", () => {
-            window.location.href = "/auth/login.html"; // Redirigir al login
+            window.location.href = "/login.html"; // Redirigir al login
         });
     }
 }
