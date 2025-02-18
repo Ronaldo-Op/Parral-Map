@@ -84,7 +84,7 @@ document.getElementById("logout-btn").addEventListener("click", async () => {
     }
 });
 
-// Mantener sesión iniciada
+/* Mantener sesión iniciada
 async function verificarSesion() {
     const { data } = await supabase.auth.getSession();
     if (data.session) {
@@ -93,7 +93,7 @@ async function verificarSesion() {
     if (data.session) {
         document.getElementById("logout-btn").style.display = "block";
     }
-}
+} */
 
 verificarSesion();
 
