@@ -88,8 +88,10 @@ document.getElementById("logout-btn").addEventListener("click", async () => {
 async function verificarSesion() {
     const { data } = await supabase.auth.getSession();
     if (data.session) {
-        document.getElementById("logout-btn").style.display = "block";
         window.location.href = "mapa.html";
+    }
+    if (data.session) {
+        document.getElementById("logout-btn").style.display = "block";
     }
 }
 
