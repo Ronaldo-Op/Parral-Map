@@ -72,7 +72,7 @@ document.getElementById("login-btn").addEventListener("click", async () => {
         }, 2000);
     }
 });
-/*
+
 // Mantener sesión iniciada
 async function verificarSesion() {
     const { data } = await supabase.auth.getSession();
@@ -100,7 +100,7 @@ document.getElementById("forgot-password").addEventListener("click", async () =>
         alert("✅ Correo de recuperación enviado.");
     }
 });
-
+/*
 // Verificar si el usuario está autenticado y mostrar botón de cerrar sesión
 async function verificarSesion() {
     const { data } = await supabase.auth.getSession();
