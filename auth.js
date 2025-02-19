@@ -1,12 +1,12 @@
 import { supabase } from "./supabase-config.js";
 
 // Alternar entre Login y Registro
-document.getElementById("toggle-register").addEventListener("click", function () {
+document.getElementById("toggle-register")?.addEventListener("click", function () {
     document.getElementById("login-section").style.display = "none";
     document.getElementById("register-section").style.display = "block";
 });
 
-document.getElementById("toggle-login").addEventListener("click", function () {
+document.getElementById("toggle-login")?.addEventListener("click", function () {
     document.getElementById("register-section").style.display = "none";
     document.getElementById("login-section").style.display = "block";
 });
@@ -26,7 +26,7 @@ function validarPassword(password) {
 let intentosFallidos = 0; // Para bloquear múltiples intentos fallidos
 
 // Función para registrar usuario con validaciones
-document.getElementById("register-btn").addEventListener("click", async () => {
+document.getElementById("register-btn")?.addEventListener("click", async () => {
     const email = document.getElementById("register-email").value;
     const password = document.getElementById("register-password").value;
 
@@ -50,7 +50,7 @@ document.getElementById("register-btn").addEventListener("click", async () => {
 });
 
 // Función para iniciar sesión con bloqueo de intentos fallidos
-document.getElementById("login-btn").addEventListener("click", async () => {
+document.getElementById("login-btn")?.addEventListener("click", async () => {
     const email = document.getElementById("login-email").value;
     const password = document.getElementById("login-password").value;
 
@@ -68,7 +68,7 @@ document.getElementById("login-btn").addEventListener("click", async () => {
         intentosFallidos = 0; // Reiniciar intentos si inicia sesión correctamente
         document.getElementById("status-message").innerText = "✅ Inicio de sesión exitoso. Redirigiendo...";
         setTimeout(() => {
-            window.location.href = "mapa.html";
+            window.location.reload();
         }, 2000);
     }
 });
@@ -82,16 +82,16 @@ async function verificarSesion() {
     }
     
     if (data.session && data.session.user) {
-        document.getElementById("logout-btn").style.display = "block";
+        document.getElementById("logout-btn")?.style.display = "block";
     } else {
-        document.getElementById("logout-btn").style.display = "none";
+        document.getElementById("logout-btn")?.style.display = "none";
     }
 }
 
 document.addEventListener("DOMContentLoaded", verificarSesion);
 
 // Recuperar contraseña
-document.getElementById("forgot-password").addEventListener("click", async () => {
+document.getElementById("forgot-password")?.addEventListener("click", async () => {
     const email = prompt("Ingresa tu correo para recuperar la contraseña:");
 
     if (!validarCorreo(email)) {
@@ -109,11 +109,11 @@ document.getElementById("forgot-password").addEventListener("click", async () =>
 });
 
 // 🔥 Función para cerrar sesión
-document.getElementById("logout-btn").addEventListener("click", async () => {
+document.getElementById("logout-btn")?.addEventListener("click", async () => {
     let { error } = await supabase.auth.signOut();
 
     if (!error) {
-        window.location.href = "index.html"; // Redirigir a la página de inicio
+        window.location.reload(); // Recargar la página para reflejar cambios
     } else {
         alert("❌ Error al cerrar sesión: " + error.message);
     }
