@@ -1,5 +1,10 @@
 import { supabase } from "./supabase-config.js";
 
+document.addEventListener("DOMContentLoaded", async () => {
+    await verificarSesion();
+    configurarBotonAuth();
+});
+
 document.addEventListener("DOMContentLoaded", function () {
     // Agregar evento al botón de inicio de sesión dentro del modal
     document.getElementById("login-btn").addEventListener("click", iniciarSesion);
