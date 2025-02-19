@@ -5,33 +5,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     configurarBotonAuth();
 });
 
-document.addEventListener("DOMContentLoaded", function () {
-    // Agregar evento al botón de inicio de sesión dentro del modal
-    document.getElementById("login-btn").addEventListener("click", iniciarSesion);
-});
-
-// 🔥 Función para iniciar sesión con mensajes de error claros
-async function iniciarSesion() {
-    const email = document.getElementById("login-email").value;
-    const password = document.getElementById("login-password").value;
-
-    try {
-        let { data, error } = await supabase.auth.signInWithPassword({ email, password });
-
-        if (error) {
-            throw new Error(error.message);
-        }
-
-        document.getElementById("status-message").innerText = "✅ Inicio de sesión exitoso.";
-        
-        setTimeout(() => {
-            window.location.reload(); // Recargar para reflejar cambios
-        }, 2000);
-    } catch (err) {
-        document.getElementById("status-message").innerText = "❌ Error: " + err.message;
-    }
-}
-
 // Alternar entre Login y Registro
 document.getElementById("toggle-register").addEventListener("click", function () {
     document.getElementById("login-section").style.display = "none";
