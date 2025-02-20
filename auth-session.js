@@ -215,12 +215,6 @@ async function cerrarSesion() {
 }
 
 // 🔥 Función para recuperar contraseña
-document.addEventListener("click", (event) => {
-    if (event.target.id === "forgot-password") {
-        recuperarContrasena();
-    }
-});
-
 async function recuperarContrasena() {
     const email = prompt("Ingresa tu correo para recuperar la contraseña:");
 
