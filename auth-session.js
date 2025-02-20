@@ -78,7 +78,7 @@ function configurarBotonAuth() {
 }*/
 
 // 🔥 Configurar los modales de inicio de sesión y registro
-async function configurarModales() {
+export function configurarModales() {
     const loginModal = document.getElementById("login-modal");
     const registerModal = document.getElementById("register-modal");
     const closeButtons = document.querySelectorAll(".close-btn");
