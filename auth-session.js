@@ -239,3 +239,60 @@ async function recuperarContrasena() {
         alert("❌ Error al enviar el correo de recuperación: " + err.message);
     }
 }
+
+// 🚀 Función para subir el archivo GeoJSON a Supabase
+async function subirGeoJSON() {
+    try {
+        // 🔥 Obtener los datos de mapa.geojson
+        const response = await fetch('mapa.geojson');
+        const data = await response.json();
+
+        // 🔥 Recorrer las características (features) del GeoJSON
+        data.features.forEach(async (feature) => {
+            if (feature.geometry.type === 'LineString') {
+                const propiedades = feature.properties;
+
+                // 🔥 Obtener las propiedades
+                const osm_id = propiedades['@id'] || 'Desconocido';
+                const access = propiedades['access'] || 'Desconocido';
+                const highway = propiedades['highway'] || 'Desconocido';
+                const lanes = propiedades['lanes'] || 'Desconocido';
+                const maxspeed = propiedades['maxspeed'] || 'Desconocido';
+                const name = propiedades['name'] || 'Sin Nombre';
+                const oneway = propiedades['oneway'] || 'Desconocido';
+                const ref = propiedades['ref'] || 'Desconocido';
+                const surface = propiedades['surface'] || 'Desconocido';
+                const coordenadas = feature.geometry.coordinates;
+
+                // 🔥 Insertar los datos en Supabase
+                const { error } = await supabase.from('calles').insert([
+                    {
+                        osm_id: osm_id,
+                        access: access,
+                        highway: highway,
+                        lanes: lanes,
+                        maxspeed: maxspeed,
+                        name: name,
+                        oneway: oneway,
+                        ref: ref,
+                        surface: surface,
+                        coordenadas: coordenadas,
+                        color: '#0000FF', // Color inicial (Azul)
+                        estado: 'Desconocido'
+                    }
+                ]);
+
+                if (error) {
+                    console.error("❌ Error al insertar:", error.message);
+                } else {
+                    console.log(`✅ Calle "${name}" insertada correctamente.`);
+                }
+            }
+        });
+    } catch (error) {
+        console.error("❌ Error al cargar el archivo GeoJSON:", error);
+    }
+}
+
+// 🚀 Ejecutar la función
+subirGeoJSON();

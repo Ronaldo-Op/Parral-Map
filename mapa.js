@@ -1,3 +1,4 @@
+/*
 let mapa;
 let calles = {}; // Almacena todas las secciones de cada calle con su nombre
 let colores = ["#0000FF", "#FF0000", "#00FF00", "#FFFF00", "#00FFFF"]; // Azul, Rojo, Verde, Amarillo
@@ -103,4 +104,51 @@ function cambiarColorCalle(nombreCalle) {
 }
 
 window.onload = iniciarMapa;
+*/
+// 🚀 Función para cargar las calles desde Supabase
+async function cargarCalles() {
+    const { data, error } = await supabase.from('calles').select('*');
 
+    if (error) {
+        console.error("❌ Error al cargar calles:", error.message);
+        return;
+    }
+
+    // 🔥 Crear las polilíneas en el mapa
+    data.forEach(calle => {
+        const coordenadas = calle.coordenadas.map(coord => ({
+            lat: coord[1],
+            lng: coord[0]
+        }));
+
+        const polilinea = new google.maps.Polyline({
+            path: coordenadas,
+            geodesic: true,
+            strokeColor: calle.color,
+            strokeOpacity: 0.7,
+            strokeWeight: 5,
+            map: mapa
+        });
+
+        // 🔥 Evento para mostrar propiedades al hacer clic
+        google.maps.event.addListener(polilinea, 'click', async function () {
+            const nuevoNombre = prompt("Nombre de la Calle:", calle.name);
+            const nuevoMaxspeed = prompt("Velocidad Máxima:", calle.maxspeed);
+            const nuevoColor = prompt("Nuevo color en HEX (#FF0000):", calle.color);
+
+            polilinea.setOptions({ strokeColor: nuevoColor });
+
+            const { error } = await supabase.from('calles').update({
+                name: nuevoNombre,
+                maxspeed: nuevoMaxspeed,
+                color: nuevoColor
+            }).eq('id', calle.id);
+
+            if (error) {
+                console.error("❌ Error al actualizar los datos:", error.message);
+            } else {
+                console.log("✅ Datos actualizados en Supabase.");
+            }
+        });
+    });
+}
