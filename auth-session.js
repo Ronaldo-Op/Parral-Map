@@ -93,6 +93,30 @@ document.addEventListener("click", (event) => {
 
 async function registrarUsuario() {
     const email = document.getElementById("register-email").value;
+        const password = document.getElementById("register-password").value;
+    
+        if (!validarCorreo(email)) {
+            document.getElementById("status-message").innerText = "❌ Correo no válido.";
+            return;
+        }
+    
+        if (!validarPassword(password)) {
+            document.getElementById("status-message").innerText = "❌ La contraseña debe tener al menos 8 caracteres, una mayúscula, un número y un símbolo.";
+            return;
+        }
+    
+        let { error } = await supabase.auth.signUp({ email, password });
+    
+        if (error) {
+            document.getElementById("status-message").innerText = "❌ Error al registrarse: " + error.message;
+        } else {
+            document.getElementById("status-message").innerText = "✅ Registro exitoso. Verifica tu correo.";
+        }
+}
+
+/*
+async function registrarUsuario() {
+    const email = document.getElementById("register-email").value;
     const password = document.getElementById("register-password").value;
 
     try {
@@ -112,3 +136,4 @@ async function registrarUsuario() {
         document.getElementById("register-status-message").innerText = "❌ Error: " + err.message;
     }
 }
+    */
