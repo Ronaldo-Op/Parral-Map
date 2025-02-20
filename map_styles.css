@@ -177,6 +177,7 @@ nav ul li:hover .submenu {
     width: 90%;
     max-width: 400px;
     animation: slideDown 0.4s ease;
+    position: relative;
 }
 
 @keyframes slideDown {

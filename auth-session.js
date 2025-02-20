@@ -210,3 +210,35 @@ async function cerrarSesion() {
         alert("❌ Error al cerrar sesión: " + err.message);
     }
 }
+
+// 🔥 Función para recuperar contraseña
+document.addEventListener("click", (event) => {
+    if (event.target.id === "forgot-password") {
+        recuperarContrasena();
+    }
+});
+
+async function recuperarContrasena() {
+    const email = prompt("Ingresa tu correo para recuperar la contraseña:");
+
+    if (!validarCorreo(email)) {
+        alert("❌ Correo no válido.");
+        return;
+    }
+
+    try {
+        // 🔥 Solicitud de recuperación de contraseña en Supabase
+        let { error } = await supabase.auth.resetPasswordForEmail(email, {
+            redirectTo: `${window.location.origin}/reset-password.html`
+        });
+
+        if (error) {
+            throw new Error(error.message);
+        } else {
+            alert("✅ Correo de recuperación enviado. Revisa tu bandeja de entrada.");
+        }
+    } catch (err) {
+        console.error("❌ Error al enviar el correo de recuperación:", err.message);
+        alert("❌ Error al enviar el correo de recuperación: " + err.message);
+    }
+}
