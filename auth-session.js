@@ -13,6 +13,9 @@ document.addEventListener("click", (event) => {
     if (event.target.id === "register-btn") {
         registrarUsuario();
     }
+    if (event.target.id === "forgot-password") {
+        recuperarContrasena();
+    }
 });
 
 // 🔥 Función para verificar sesión
