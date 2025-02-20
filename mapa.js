@@ -116,13 +116,13 @@ async function cargarCalles() {
 
     // 🔥 Crear las polilíneas en el mapa
     data.forEach(calle => {
-        const coordenadas = calle.coordenadas.map(coord => ({
+        const coordinates = calle.coordinates.map(coord => ({
             lat: coord[1],
             lng: coord[0]
         }));
 
         const polilinea = new google.maps.Polyline({
-            path: coordenadas,
+            path: coordinates,
             geodesic: true,
             strokeColor: calle.color,
             strokeOpacity: 0.7,
