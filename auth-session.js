@@ -4,7 +4,37 @@ import { supabase } from "./supabase-config.js";
 document.addEventListener("DOMContentLoaded", async () => {
     await verificarSesion();
     configurarBotonAuth();
+    configurarModales();
 });
+
+function configurarModales() {
+    const loginModal = document.getElementById("login-modal");
+    const registerModal = document.getElementById("register-modal");
+    const closeButtons = document.querySelectorAll(".close-btn");
+
+    document.getElementById("open-register")?.addEventListener("click", () => {
+        loginModal.style.display = "none";
+        registerModal.style.display = "flex";
+    });
+
+    document.getElementById("open-login")?.addEventListener("click", () => {
+        registerModal.style.display = "none";
+        loginModal.style.display = "flex";
+    });
+
+    closeButtons.forEach((btn) => {
+        btn.addEventListener("click", () => {
+            loginModal.style.display = "none";
+            registerModal.style.display = "none";
+        });
+    });
+
+    window.addEventListener("click", (event) => {
+        if (event.target === loginModal) loginModal.style.display = "none";
+        if (event.target === registerModal) registerModal.style.display = "none";
+    });
+}
+
 /*
 // Alternar entre Login y Registro
 document.getElementById("toggle-register").addEventListener("click", function () {
