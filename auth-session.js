@@ -66,26 +66,29 @@ document.addEventListener("click", (event) => {
         iniciarSesion();
     }
 });
+let intentosFallidos = 0; // Para bloquear múltiples intentos fallidos
 
 async function iniciarSesion() {
     const email = document.getElementById("login-email").value;
     const password = document.getElementById("login-password").value;
 
-    try {
-        let { error } = await supabase.auth.signInWithPassword({ email, password });
-
-        if (error) {
-            throw new Error(error.message);
+    if (intentosFallidos >= 5) {
+            document.getElementById("status-message").innerText = "❌ Demasiados intentos fallidos. Intenta más tarde.";
+            return;
         }
-
-        document.getElementById("status-message").innerText = "✅ Inicio de sesión exitoso.";
-        
-        setTimeout(() => {
-            window.location.reload(); // Recargar para reflejar cambios
-        }, 2000);
-    } catch (err) {
-        document.getElementById("status-message").innerText = "❌ Error: " + err.message;
-    }
+    
+        let { error } = await supabase.auth.signInWithPassword({ email, password });
+    
+        if (error) {
+            intentosFallidos++;
+            document.getElementById("status-message").innerText = `❌ Usuario o contraseña incorrectos. Intento ${intentosFallidos}/5`;
+        } else {
+            intentosFallidos = 0; // Reiniciar intentos si inicia sesión correctamente
+            document.getElementById("status-message").innerText = "✅ Inicio de sesión exitoso. Redirigiendo...";
+            setTimeout(() => {
+                window.location.href = "mapa.html";
+            }, 2000);
+        }
 }
 
 // 🔥 Función para cerrar sesión
