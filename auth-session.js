@@ -6,6 +6,17 @@ document.addEventListener("DOMContentLoaded", async () => {
     configurarBotonAuth();
 });
 
+// Alternar entre Login y Registro
+document.getElementById("toggle-register").addEventListener("click", function () {
+    document.getElementById("login-section").style.display = "none";
+    document.getElementById("register-section").style.display = "block";
+});
+
+document.getElementById("toggle-login").addEventListener("click", function () {
+    document.getElementById("register-section").style.display = "none";
+    document.getElementById("login-section").style.display = "block";
+});
+
 // 🔥 Función para verificar sesión
 async function verificarSesion() {
     try {
