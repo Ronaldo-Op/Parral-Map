@@ -147,26 +147,46 @@ async function registrarUsuario() {
     }
 }
 
-/*
-async function registrarUsuario() {
-    const email = document.getElementById("register-email").value;
-    const password = document.getElementById("register-password").value;
+// 🔥 Función para iniciar sesión
+document.addEventListener("click", (event) => {
+    if (event.target.id === "login-btn") {
+        iniciarSesion();
+    }
+});
+
+async function iniciarSesion() {
+    const email = document.getElementById("login-email").value;
+    const password = document.getElementById("login-password").value;
+
+    // 🔍 Validaciones
+    if (!validarCorreo(email)) {
+        document.getElementById("status-message").innerText = "❌ Correo no válido.";
+        return;
+    }
+
+    if (!password) {
+        document.getElementById("status-message").innerText = "❌ La contraseña no puede estar vacía.";
+        return;
+    }
 
     try {
-        let { error } = await supabase.auth.signUp({ email, password });
+        // 🔥 Iniciar sesión en Supabase
+        let { data, error } = await supabase.auth.signInWithPassword({ email, password });
 
         if (error) {
-            throw new Error(error.message);
+            if (error.message.includes("Invalid login credentials")) {
+                document.getElementById("status-message").innerText = "❌ Usuario o contraseña incorrectos.";
+            } else {
+                throw new Error(error.message);
+            }
+        } else {
+            document.getElementById("status-message").innerText = "✅ Inicio de sesión exitoso. Redirigiendo...";
+            
+            setTimeout(() => {
+                window.location.href = "mapa.html";
+            }, 2000);
         }
-
-        document.getElementById("register-status-message").innerText = "✅ Registro exitoso. Verifica tu correo.";
-        
-        setTimeout(() => {
-            document.getElementById("register-modal").style.display = "none";
-            document.getElementById("login-modal").style.display = "flex";
-        }, 2000);
     } catch (err) {
-        document.getElementById("register-status-message").innerText = "❌ Error: " + err.message;
+        document.getElementById("status-message").innerText = "❌ Error: " + err.message;
     }
 }
-    */
