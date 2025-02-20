@@ -53,7 +53,7 @@ async function verificarSesion() {
         console.error("⚠️ Error en verificarSesion():", err);
     }
 }
-
+/*
 // 🔥 Configurar el botón de inicio/cierre de sesión
 function configurarBotonAuth() {
     const authBtn = document.getElementById("auth-btn");
@@ -73,7 +73,7 @@ function configurarBotonAuth() {
             loginModal.style.display = "flex"; // Mostrar el modal de inicio de sesión
         }
     });
-}
+}*/
 
 // 🔥 Configurar los modales de inicio de sesión y registro
 function configurarModales() {
