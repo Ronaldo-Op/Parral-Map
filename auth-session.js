@@ -56,7 +56,7 @@ async function verificarSesion() {
 
 // 🔥 Configurar el botón de inicio/cierre de sesión
 function configurarBotonAuth() {
-    const authBtn = document.getElementById("auth-btn");
+    const authBtn = document.getElementById("#auth-btn");
     //const loginModal = document.getElementById("login-modal");
 
     if (!authBtn/* || !loginModal*/) {
@@ -70,7 +70,7 @@ function configurarBotonAuth() {
         if (data.session && data.session.user) {
             await cerrarSesion();
         } else {
-            const loginModal = document.getElementById("login-modal");
+            const loginModal = document.getElementById("#login-modal");
             if (loginModal) loginModal.style.display = "flex"; // Mostrar el modal de inicio de sesión
             //loginModal.style.display = "flex"; // Mostrar el modal de inicio de sesión
         }
