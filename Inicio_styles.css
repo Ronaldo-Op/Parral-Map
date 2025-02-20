@@ -244,5 +244,6 @@ body {
 }
 
 .main-content .enter-btn:hover {
-    background-color: #155a9c;
+    background-color: white;
+    color: #1e90ff;
 }
