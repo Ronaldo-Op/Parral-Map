@@ -53,13 +53,13 @@ async function verificarSesion() {
         console.error("⚠️ Error en verificarSesion():", err);
     }
 }
-/*
+
 // 🔥 Configurar el botón de inicio/cierre de sesión
 function configurarBotonAuth() {
     const authBtn = document.getElementById("auth-btn");
-    const loginModal = document.getElementById("login-modal");
+    //const loginModal = document.getElementById("login-modal");
 
-    if (!authBtn || !loginModal) {
+    if (!authBtn/* || !loginModal*/) {
         console.warn("⚠️ No se encontraron elementos para el modal.");
         return;
     }
@@ -70,10 +70,12 @@ function configurarBotonAuth() {
         if (data.session && data.session.user) {
             await cerrarSesion();
         } else {
-            loginModal.style.display = "flex"; // Mostrar el modal de inicio de sesión
+            const loginModal = document.getElementById("login-modal");
+            if (loginModal) loginModal.style.display = "flex"; // Mostrar el modal de inicio de sesión
+            //loginModal.style.display = "flex"; // Mostrar el modal de inicio de sesión
         }
     });
-}*/
+}
 
 // 🔥 Configurar los modales de inicio de sesión y registro
 export function configurarModales() {
