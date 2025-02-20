@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     await verificarSesion();
     configurarBotonAuth();
 });
-
+/*
 // Alternar entre Login y Registro
 document.getElementById("toggle-register").addEventListener("click", function () {
     document.getElementById("login-section").style.display = "none";
@@ -16,6 +16,7 @@ document.getElementById("toggle-login").addEventListener("click", function () {
     document.getElementById("register-section").style.display = "none";
     document.getElementById("login-section").style.display = "block";
 });
+*/
 /*
 // Validación de correo electrónico
 function validarCorreo(email) {
