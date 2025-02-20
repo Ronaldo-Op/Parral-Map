@@ -17,7 +17,7 @@ document.getElementById("toggle-login").addEventListener("click", function () {
     document.getElementById("login-section").style.display = "block";
 });
 */
-/*
+
 // Validación de correo electrónico
 function validarCorreo(email) {
     const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -29,7 +29,7 @@ function validarPassword(password) {
     const regex = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
     return regex.test(password);
 }
-*/
+
 // 🔥 Función para verificar sesión
 async function verificarSesion() {
     try {
@@ -83,7 +83,7 @@ function configurarBotonAuth() {
         }
     });
 }
-/*
+
 // Función para registrar usuario con validaciones
 async function registrarse() {
     const email = document.getElementById("register-email").value;
@@ -107,20 +107,20 @@ async function registrarse() {
         document.getElementById("status-message").innerText = "✅ Registro exitoso. Verifica tu correo.";
     }
 };
-*/
+
 // 🔥 Función para iniciar sesión desde el modal
 document.addEventListener("click", (event) => {
     if (event.target.id === "login-btn") {
         iniciarSesion();
     }
 });
-/*
+
 document.addEventListener("click", (event) => {
     if (event.target.id === "register-btn") {
         registrarse();
     }
 });
-*/
+
 let intentosFallidos = 0; // Para bloquear múltiples intentos fallidos
 
 async function iniciarSesion() {
