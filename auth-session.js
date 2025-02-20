@@ -87,7 +87,7 @@ export function configurarModales() {
 // 🔥 Configurar el botón de inicio/cierre de sesión
 function configurarBotonAuth() {
     const authBtn = document.getElementById("auth-btn");
-    const modal = document.getElementById("login-modal");
+    const loginModal = document.getElementById("login-modal");
     const closeModal = document.querySelector("close-btn");
 
     if (!authBtn || !modal || !closeModal) {
