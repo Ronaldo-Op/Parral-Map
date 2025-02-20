@@ -278,7 +278,7 @@ async function subirGeoJSON() {
                         surface: surface,
                         coordinates: coordinates,
                         color: '#0000FF', // Color inicial (Azul)
-                        estado: 'Desconocido'
+                        state: 'Desconocido'
                     }
                 ]);
 
