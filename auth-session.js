@@ -17,6 +17,18 @@ document.getElementById("toggle-login").addEventListener("click", function () {
     document.getElementById("login-section").style.display = "block";
 });
 
+// Validación de correo electrónico
+function validarCorreo(email) {
+    const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    return regex.test(email);
+}
+
+// Validación de contraseña segura
+function validarPassword(password) {
+    const regex = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    return regex.test(password);
+}
+
 // 🔥 Función para verificar sesión
 async function verificarSesion() {
     try {
@@ -71,12 +83,43 @@ function configurarBotonAuth() {
     });
 }
 
+// Función para registrar usuario con validaciones
+async function registrarse() {
+    const email = document.getElementById("register-email").value;
+    const password = document.getElementById("register-password").value;
+
+    if (!validarCorreo(email)) {
+        document.getElementById("status-message").innerText = "❌ Correo no válido.";
+        return;
+    }
+
+    if (!validarPassword(password)) {
+        document.getElementById("status-message").innerText = "❌ La contraseña debe tener al menos 8 caracteres, una mayúscula, un número y un símbolo.";
+        return;
+    }
+
+    let { error } = await supabase.auth.signUp({ email, password });
+
+    if (error) {
+        document.getElementById("status-message").innerText = "❌ Error al registrarse: " + error.message;
+    } else {
+        document.getElementById("status-message").innerText = "✅ Registro exitoso. Verifica tu correo.";
+    }
+};
+
 // 🔥 Función para iniciar sesión desde el modal
 document.addEventListener("click", (event) => {
     if (event.target.id === "login-btn") {
         iniciarSesion();
     }
 });
+
+document.addEventListener("click", (event) => {
+    if (event.target.id === "register-btn") {
+        registrarse();
+    }
+});
+
 let intentosFallidos = 0; // Para bloquear múltiples intentos fallidos
 
 async function iniciarSesion() {
