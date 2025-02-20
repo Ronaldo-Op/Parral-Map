@@ -4,7 +4,8 @@ import { supabase } from "./supabase-config.js";
 document.addEventListener("DOMContentLoaded", async () => {
     await verificarSesion();
     configurarBotonAuth();
-    configurarModales();
+    //configurarModales();
+    observarNavbar(); // Detectar cambios en el DOM y configurar modales
 });
 
 /*
@@ -75,6 +76,20 @@ function configurarBotonAuth() {
             //loginModal.style.display = "flex"; // Mostrar el modal de inicio de sesión
         }
     });
+}
+
+// 🔥 Función para observar cambios en el DOM (cuando navbar.html se carga)
+function observarNavbar() {
+    const observer = new MutationObserver(() => {
+        if (document.getElementById("login-modal")) {
+            console.log("✅ Navbar y modales detectados. Configurando eventos...");
+            configurarModales();
+            observer.disconnect(); // Detener la observación
+        }
+    });
+
+    // Observar cambios en el cuerpo del documento
+    observer.observe(document.body, { childList: true, subtree: true });
 }
 
 // 🔥 Configurar los modales de inicio de sesión y registro
