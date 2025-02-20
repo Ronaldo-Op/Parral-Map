@@ -1,5 +1,5 @@
 import { supabase } from "./supabase-config.js";
-
+/*
 async function verificarSesion() {
     const { data, error } = await supabase.auth.getSession();
     const authBtn = document.getElementById("auth-btn");
@@ -35,7 +35,7 @@ async function verificarSesion() {
             modal.style.display = "none";
         }
     });
-}
+}*/
 /*
 // 🔥 Cargar la barra de navegación
 async function cargarNavbar() {
