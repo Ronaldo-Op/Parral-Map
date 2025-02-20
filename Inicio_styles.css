@@ -134,18 +134,29 @@ button:hover {
     color: #155a9c;
 }
 
+/* Botón para Cerrar Modal */
 .close-btn {
     cursor: pointer;
-    color: #999;
+    color: white;
+    background-color: #ff4d4d;
+    border-radius: 50%;
     font-size: 24px;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     position: absolute;
-    top: 10px;
-    right: 15px;
-    transition: color 0.3s ease;
+    top: -15px;
+    right: -15px;
+    z-index: 1000;
+    transition: background 0.3s ease, color 0.3s ease;
 }
 
 .close-btn:hover {
-    color: #555;
+    background-color: #ff1a1a;
+    color: white;
+    transform: scale(1.1);
 }
 
 
