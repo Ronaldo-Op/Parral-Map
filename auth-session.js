@@ -7,34 +7,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     configurarModales();
 });
 
-function configurarModales() {
-    const loginModal = document.getElementById("login-modal");
-    const registerModal = document.getElementById("register-modal");
-    const closeButtons = document.querySelectorAll(".close-btn");
-
-    document.getElementById("open-register")?.addEventListener("click", () => {
-        loginModal.style.display = "none";
-        registerModal.style.display = "flex";
-    });
-
-    document.getElementById("open-login")?.addEventListener("click", () => {
-        registerModal.style.display = "none";
-        loginModal.style.display = "flex";
-    });
-
-    closeButtons.forEach((btn) => {
-        btn.addEventListener("click", () => {
-            loginModal.style.display = "none";
-            registerModal.style.display = "none";
-        });
-    });
-
-    window.addEventListener("click", (event) => {
-        if (event.target === loginModal) loginModal.style.display = "none";
-        if (event.target === registerModal) registerModal.style.display = "none";
-    });
-}
-
 /*
 // Alternar entre Login y Registro
 document.getElementById("toggle-register").addEventListener("click", function () {
@@ -82,6 +54,57 @@ async function verificarSesion() {
     }
 }
 
+// 🔥 Configurar el botón de inicio/cierre de sesión
+function configurarBotonAuth() {
+    const authBtn = document.getElementById("auth-btn");
+    const loginModal = document.getElementById("login-modal");
+
+    if (!authBtn || !loginModal) {
+        console.warn("⚠️ No se encontraron elementos para el modal.");
+        return;
+    }
+
+    authBtn.addEventListener("click", async () => {
+        const { data } = await supabase.auth.getSession();
+
+        if (data.session && data.session.user) {
+            await cerrarSesion();
+        } else {
+            loginModal.style.display = "flex"; // Mostrar el modal de inicio de sesión
+        }
+    });
+}
+
+// 🔥 Configurar los modales de inicio de sesión y registro
+function configurarModales() {
+    const loginModal = document.getElementById("login-modal");
+    const registerModal = document.getElementById("register-modal");
+    const closeButtons = document.querySelectorAll(".close-btn");
+
+    document.getElementById("open-register")?.addEventListener("click", () => {
+        loginModal.style.display = "none";
+        registerModal.style.display = "flex";
+    });
+
+    document.getElementById("open-login")?.addEventListener("click", () => {
+        registerModal.style.display = "none";
+        loginModal.style.display = "flex";
+    });
+
+    closeButtons.forEach((btn) => {
+        btn.addEventListener("click", () => {
+            loginModal.style.display = "none";
+            registerModal.style.display = "none";
+        });
+    });
+
+    window.addEventListener("click", (event) => {
+        if (event.target === loginModal) loginModal.style.display = "none";
+        if (event.target === registerModal) registerModal.style.display = "none";
+    });
+}
+
+/*
 // 🔥 Configurar el botón de inicio/cierre de sesión
 function configurarBotonAuth() {
     const authBtn = document.getElementById("auth-btn");
@@ -137,20 +160,20 @@ async function registrarse() {
         document.getElementById("status-message").innerText = "✅ Registro exitoso. Verifica tu correo.";
     }
 };
-
+*/
 // 🔥 Función para iniciar sesión desde el modal
 document.addEventListener("click", (event) => {
     if (event.target.id === "login-btn") {
         iniciarSesion();
     }
 });
-
+/*
 document.addEventListener("click", (event) => {
     if (event.target.id === "register-btn") {
         registrarse();
     }
 });
-
+*/
 let intentosFallidos = 0; // Para bloquear múltiples intentos fallidos
 
 async function iniciarSesion() {
@@ -175,6 +198,29 @@ async function iniciarSesion() {
             }, 2000);
         }
 }
+
+// 🔥 Función para registrar usuario
+document.getElementById("register-btn")?.addEventListener("click", async () => {
+    const email = document.getElementById("register-email")?.value;
+    const password = document.getElementById("register-password")?.value;
+
+    try {
+        let { error } = await supabase.auth.signUp({ email, password });
+
+        if (error) {
+            throw new Error(error.message);
+        }
+
+        document.getElementById("register-status-message")?.innerText = "✅ Registro exitoso. Verifica tu correo.";
+        
+        setTimeout(() => {
+            document.getElementById("register-modal").style.display = "none";
+            document.getElementById("login-modal").style.display = "flex"; // Abrir el modal de inicio de sesión
+        }, 2000);
+    } catch (err) {
+        document.getElementById("register-status-message")?.innerText = "❌ Error: " + err.message;
+    }
+});
 
 // 🔥 Función para cerrar sesión
 async function cerrarSesion() {
