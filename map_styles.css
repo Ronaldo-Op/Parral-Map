@@ -101,56 +101,57 @@ nav ul li:hover .submenu {
     z-index: 1; /* Asegura que el mapa no tape el menú */
 }
 
-/* Página de inicio */
-.inicio-container {
-    text-align: center;
-    padding: 50px;
-    background-color: #fff;
-    max-width: 600px;
-    margin: 100px auto;
-    border-radius: 10px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+/* Global Reset para Navbar */
+.navbar,
+.navbar * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    text-decoration: none;
 }
 
-.inicio-container h1 {
-    font-size: 2rem;
-    color: #333;
-}
-
-.inicio-container p {
-    font-size: 1.2rem;
-    color: #666;
-}
-
-.inicio-container button {
-    padding: 10px 20px;
-    font-size: 1.2rem;
-    background-color: #007bff;
+/* Navbar */
+.navbar {
+    width: 100%;
+    background-color: #1e90ff;
     color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-top: 20px;
+    padding: 10px 30px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: nowrap;
 }
 
-.inicio-container button:hover {
-    background-color: #0056b3;
+.navbar h1 {
+    font-size: 24px;
+    flex-grow: 1;
+    text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-right: 20px;
 }
 
-.logout-btn {
-    position: absolute;
-    right: 10px;
-    top: 10px;
-    background: #dc3545;
-    border: none;
+.navbar button {
+    background: none;
+    border: 2px solid white;
     color: white;
-    padding: 8px 15px;
-    border-radius: 5px;
     cursor: pointer;
+    font-size: 18px;
+    padding: 5px 15px;
+    border-radius: 5px;
+    transition: background 0.3s ease;
+    white-space: nowrap;
+    flex-shrink: 0;
 }
 
-.logout-btn:hover {
-    background: #c82333;
+.navbar button:hover {
+    background-color: white;
+    color: #1e90ff;
 }
 
 /* Modales */
