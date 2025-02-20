@@ -148,6 +148,9 @@ body {
     padding: 0;
     background-color: #f5f7fa;
     background-image: url('fondo.jpg'); /* Imagen de fondo */
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
     display: flex;
     justify-content: center;
     align-items: center;
