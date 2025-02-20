@@ -24,8 +24,11 @@
     <div class="modal-content">
         <span class="close-btn">&times;</span>
         <h2>Registro</h2>
-        <input type="email" id="register-email" placeholder="Correo electrónico">
-        <input type="password" id="register-password" placeholder="Contraseña">
+        <input type="text" id="register-username" placeholder="Nombre de usuario" required>
+        <input type="text" id="register-firstname" placeholder="Nombre" required>
+        <input type="text" id="register-lastname" placeholder="Apellidos" required>
+        <input type="email" id="register-email" placeholder="Correo electrónico" required>
+        <input type="password" id="register-password" placeholder="Contraseña" required>
         <button id="register-btn">Registrarse</button>
         <p>¿Ya tienes cuenta? <a href="#" id="open-login">Inicia sesión aquí</a></p>
         <p id="register-status-message"></p>

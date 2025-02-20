@@ -8,6 +8,13 @@ document.addEventListener("navbarCargada", async () => {
     configurarModales();
 });
 
+// 🔥 Función para registrar usuario con parámetros adicionales
+document.addEventListener("click", (event) => {
+    if (event.target.id === "register-btn") {
+        registrarUsuario();
+    }
+});
+
 // 🔥 Función para verificar sesión
 async function verificarSesion() {
     try {
@@ -93,25 +100,62 @@ document.addEventListener("click", (event) => {
 
 async function registrarUsuario() {
     const email = document.getElementById("register-email").value;
-        const password = document.getElementById("register-password").value;
-    
-        if (!validarCorreo(email)) {
-            document.getElementById("status-message").innerText = "❌ Correo no válido.";
+    const password = document.getElementById("register-password").value;
+    const username = document.getElementById("register-username").value;
+    const firstName = document.getElementById("register-firstname").value;
+    const lastName = document.getElementById("register-lastname").value;
+
+    // 🔍 Validaciones adicionales
+    if (!username || !firstName || !lastName) {
+        document.getElementById("register-status-message").innerText = "❌ Todos los campos son obligatorios.";
+        return;
+    }
+
+    try {
+        // 🔥 Verificar si el nombre de usuario ya está en uso
+        let { data: existingUser, error: userError } = await supabase
+            .from("usuarios")
+            .select("username")
+            .eq("username", username)
+            .single();
+
+        if (existingUser) {
+            document.getElementById("register-status-message").innerText = "❌ El nombre de usuario ya está en uso.";
             return;
         }
-    
-        if (!validarPassword(password)) {
-            document.getElementById("status-message").innerText = "❌ La contraseña debe tener al menos 8 caracteres, una mayúscula, un número y un símbolo.";
-            return;
-        }
-    
+
+        // 🔥 Registrar usuario en Supabase
         let { error } = await supabase.auth.signUp({ email, password });
-    
+
         if (error) {
-            document.getElementById("status-message").innerText = "❌ Error al registrarse: " + error.message;
-        } else {
-            document.getElementById("status-message").innerText = "✅ Registro exitoso. Verifica tu correo.";
+            throw new Error(error.message);
         }
+
+        // 🔥 Guardar información adicional en la tabla 'usuarios'
+        let { error: insertError } = await supabase
+            .from("usuarios")
+            .insert([
+                {
+                    username,
+                    first_name: firstName,
+                    last_name: lastName,
+                    email
+                }
+            ]);
+
+        if (insertError) {
+            throw new Error(insertError.message);
+        }
+
+        document.getElementById("register-status-message").innerText = "✅ Registro exitoso. Verifica tu correo.";
+        
+        setTimeout(() => {
+            document.getElementById("register-modal").style.display = "none";
+            document.getElementById("login-modal").style.display = "flex";
+        }, 2000);
+    } catch (err) {
+        document.getElementById("register-status-message").innerText = "❌ Error: " + err.message;
+    }
 }
 
 /*
