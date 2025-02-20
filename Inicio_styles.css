@@ -47,8 +47,8 @@ button:hover {
     color: red;
     font-weight: bold;
 }
-
-// 🔥 Estilos para el Modal 
+*/
+/* 🔥 Estilos para el Modal */
 .modal {
     display: none;
     position: fixed;
@@ -78,7 +78,7 @@ button:hover {
     cursor: pointer;
 }
 
-// Menú desplegable 
+/* Menú desplegable */
 nav {
     position: absolute;
     left: 0;
@@ -109,7 +109,7 @@ nav ul li a {
     display: block;
 }
 
-// Submenú desplegable dentro de Configuración
+/* Submenú desplegable dentro de Configuración */
 .submenu {
     display: none;
     position: absolute;
@@ -140,7 +140,6 @@ nav ul li:hover .submenu {
 .submenu ul li label {
     cursor: pointer;
 }
-*/
 
 /* Estilo General */
 body {
