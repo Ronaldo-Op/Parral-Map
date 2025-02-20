@@ -5,7 +5,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     await verificarSesion();
     configurarBotonAuth();
     //configurarModales();
-    observarNavbar(); // Detectar cambios en el DOM y configurar modales
 });
 
 /*
@@ -78,32 +77,18 @@ function configurarBotonAuth() {
     });
 }
 
-// 🔥 Función para observar cambios en el DOM (cuando navbar.html se carga)
-function observarNavbar() {
-    const observer = new MutationObserver(() => {
-        if (document.getElementById("login-modal")) {
-            console.log("✅ Navbar y modales detectados. Configurando eventos...");
-            configurarModales();
-            observer.disconnect(); // Detener la observación
-        }
-    });
-
-    // Observar cambios en el cuerpo del documento
-    observer.observe(document.body, { childList: true, subtree: true });
-}
-
-// 🔥 Configurar los modales de inicio de sesión y registro
+// 🔥 Exportar `configurarModales()` para usarlo en `navbar.js`
 export function configurarModales() {
-    const loginModal = document.getElementById("login-modal");
-    const registerModal = document.getElementById("register-modal");
+    const loginModal = document.querySelector("#login-modal");
+    const registerModal = document.querySelector("#register-modal");
     const closeButtons = document.querySelectorAll(".close-btn");
 
-    document.getElementById("open-register")?.addEventListener("click", () => {
+    document.querySelector("#open-register")?.addEventListener("click", () => {
         loginModal.style.display = "none";
         registerModal.style.display = "flex";
     });
 
-    document.getElementById("open-login")?.addEventListener("click", () => {
+    document.querySelector("#open-login")?.addEventListener("click", () => {
         registerModal.style.display = "none";
         loginModal.style.display = "flex";
     });
@@ -215,7 +200,7 @@ async function iniciarSesion() {
             }, 2000);
         }
 }
-
+/*
 // 🔥 Función para registrar usuario
 document.getElementById("register-btn")?.addEventListener("click", async () => {
     const email = document.getElementById("register-email")?.value;
@@ -238,6 +223,35 @@ document.getElementById("register-btn")?.addEventListener("click", async () => {
         document.getElementById("register-status-message")?.innerText = "❌ Error: " + err.message;
     }
 });
+*/
+// 🔥 Función para registrar usuario
+document.addEventListener("click", (event) => {
+    if (event.target.id === "register-btn") {
+        registrarUsuario();
+    }
+});
+
+async function registrarUsuario() {
+    const email = document.querySelector("#register-email")?.value;
+    const password = document.querySelector("#register-password")?.value;
+
+    try {
+        let { error } = await supabase.auth.signUp({ email, password });
+
+        if (error) {
+            throw new Error(error.message);
+        }
+
+        document.querySelector("#register-status-message")?.innerText = "✅ Registro exitoso. Verifica tu correo.";
+        
+        setTimeout(() => {
+            document.querySelector("#register-modal").style.display = "none";
+            document.querySelector("#login-modal").style.display = "flex";
+        }, 2000);
+    } catch (err) {
+        document.querySelector("#register-status-message")?.innerText = "❌ Error: " + err.message;
+    }
+}
 
 // 🔥 Función para cerrar sesión
 async function cerrarSesion() {
