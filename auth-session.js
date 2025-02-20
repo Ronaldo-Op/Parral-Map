@@ -54,13 +54,16 @@ function configurarBotonAuth() {
         const { data } = await supabase.auth.getSession();
 
         if (data.session && data.session.user) {
+            // 🔥 Si está autenticado, cerrar sesión
             await cerrarSesion();
         } else {
+            // 🔥 Si no está autenticado, abrir el modal de inicio de sesión
             const loginModal = document.getElementById("login-modal");
             if (loginModal) loginModal.style.display = "flex";
         }
     });
 }
+
 
 // 🔥 Configurar los modales de inicio de sesión y registro
 function configurarModales() {
@@ -188,5 +191,22 @@ async function iniciarSesion() {
         }
     } catch (err) {
         document.getElementById("status-message").innerText = "❌ Error: " + err.message;
+    }
+}
+
+// 🔥 Función para cerrar sesión
+async function cerrarSesion() {
+    try {
+        let { error } = await supabase.auth.signOut();
+
+        if (error) {
+            throw new Error(error.message);
+        }
+
+        // ✅ Redirigir al usuario a la página de inicio
+        window.location.href = "index.html";
+    } catch (err) {
+        console.error("❌ Error al cerrar sesión:", err.message);
+        alert("❌ Error al cerrar sesión: " + err.message);
     }
 }
