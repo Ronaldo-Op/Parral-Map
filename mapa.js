@@ -105,6 +105,21 @@ function cambiarColorCalle(nombreCalle) {
 
 window.onload = iniciarMapa;
 */
+let mapa;
+let polilineas = [];
+
+// 🚀 Iniciar el mapa de Google Maps
+function iniciarMapa() {
+    mapa = new google.maps.Map(document.getElementById('mapa'), {
+        center: { lat: 26.9339, lng: -105.6664 },
+        zoom: 14,
+        mapTypeId: 'roadmap'
+    });
+
+    // 🔥 Cargar las calles desde Supabase
+    cargarCalles();
+}
+
 // 🚀 Función para cargar las calles desde Supabase
 async function cargarCalles() {
     const { data, error } = await supabase.from('calles').select('*');
@@ -116,39 +131,48 @@ async function cargarCalles() {
 
     // 🔥 Crear las polilíneas en el mapa
     data.forEach(calle => {
-        const coordinates = calle.coordinates.map(coord => ({
-            lat: coord[1],
-            lng: coord[0]
-        }));
+        // 🔥 Verificar que las coordenadas sean un array válido
+        if (Array.isArray(calle.coordenadas) && calle.coordenadas.length > 0) {
+            const coordenadas = calle.coordenadas.map(coord => ({
+                lat: parseFloat(coord[1]),
+                lng: parseFloat(coord[0])
+            }));
 
-        const polilinea = new google.maps.Polyline({
-            path: coordinates,
-            geodesic: true,
-            strokeColor: calle.color,
-            strokeOpacity: 0.7,
-            strokeWeight: 5,
-            map: mapa
-        });
+            const polilinea = new google.maps.Polyline({
+                path: coordenadas,
+                geodesic: true,
+                strokeColor: calle.color || '#0000FF',
+                strokeOpacity: 0.7,
+                strokeWeight: 5,
+                map: mapa
+            });
 
-        // 🔥 Evento para mostrar propiedades al hacer clic
-        google.maps.event.addListener(polilinea, 'click', async function () {
-            const nuevoNombre = prompt("Nombre de la Calle:", calle.name);
-            const nuevoMaxspeed = prompt("Velocidad Máxima:", calle.maxspeed);
-            const nuevoColor = prompt("Nuevo color en HEX (#FF0000):", calle.color);
+            polilineas.push(polilinea);
 
-            polilinea.setOptions({ strokeColor: nuevoColor });
+            // 🔥 Evento para mostrar propiedades al hacer clic
+            google.maps.event.addListener(polilinea, 'click', async function () {
+                const nuevoNombre = prompt("Nombre de la Calle:", calle.name);
+                const nuevoMaxspeed = prompt("Velocidad Máxima:", calle.maxspeed);
+                const nuevoColor = prompt("Nuevo color en HEX (#FF0000):", calle.color);
 
-            const { error } = await supabase.from('calles').update({
-                name: nuevoNombre,
-                maxspeed: nuevoMaxspeed,
-                color: nuevoColor
-            }).eq('id', calle.id);
+                polilinea.setOptions({ strokeColor: nuevoColor });
 
-            if (error) {
-                console.error("❌ Error al actualizar los datos:", error.message);
-            } else {
-                console.log("✅ Datos actualizados en Supabase.");
-            }
-        });
+                const { error } = await supabase.from('calles').update({
+                    name: nuevoNombre,
+                    maxspeed: nuevoMaxspeed,
+                    color: nuevoColor
+                }).eq('id', calle.id);
+
+                if (error) {
+                    console.error("❌ Error al actualizar los datos:", error.message);
+                } else {
+                    console.log("✅ Datos actualizados en Supabase.");
+                }
+            });
+        } else {
+            console.warn(`⚠️ Coordenadas inválidas para la calle: ${calle.name}`);
+        }
     });
 }
+
+window.onload = iniciarMapa;
