@@ -153,32 +153,101 @@ nav ul li:hover .submenu {
     background: #c82333;
 }
 
-/* 🔥 Estilos para el Modal */
+/* Modales */
 .modal {
     display: none;
     position: fixed;
-    z-index: 1000;
-    left: 0;
     top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
     justify-content: center;
     align-items: center;
+    transition: opacity 0.3s ease;
+    z-index: 999;
 }
 
 .modal-content {
     background: white;
-    padding: 20px;
-    border-radius: 8px;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     text-align: center;
-    width: 300px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    width: 90%;
+    max-width: 400px;
+    animation: slideDown 0.4s ease;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.modal h2 {
+    color: #333;
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.modal input[type="email"],
+.modal input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.modal button {
+    background-color: #1e90ff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 18px;
+    transition: background 0.3s ease;
+}
+
+.modal button:hover {
+    background-color: #155a9c;
+}
+
+.modal p {
+    font-size: 14px;
+    color: #777;
+    margin: 10px 0;
+}
+
+.modal a {
+    color: #1e90ff;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+.modal a:hover {
+    color: #155a9c;
 }
 
 .close-btn {
-    float: right;
-    font-size: 24px;
     cursor: pointer;
+    color: #999;
+    font-size: 24px;
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    transition: color 0.3s ease;
+}
+
+.close-btn:hover {
+    color: #555;
 }
