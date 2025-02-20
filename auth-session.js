@@ -4,7 +4,9 @@ import { supabase } from "./supabase-config.js";
 document.addEventListener("DOMContentLoaded", async () => {
     await verificarSesion();
     configurarBotonAuth();
-    configurarModales();
+    setTimeout(() => {
+        configurarModales();
+    }, 1000);
 });
 
 /*
