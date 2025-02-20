@@ -54,29 +54,6 @@ async function verificarSesion() {
     }
 }
 
-// 🔥 Configurar el botón de inicio/cierre de sesión
-function configurarBotonAuth() {
-    const authBtn = document.getElementById("#auth-btn");
-    //const loginModal = document.getElementById("login-modal");
-
-    if (!authBtn/* || !loginModal*/) {
-        console.warn("⚠️ No se encontraron elementos para el modal.");
-        return;
-    }
-
-    authBtn.addEventListener("click", async () => {
-        const { data } = await supabase.auth.getSession();
-
-        if (data.session && data.session.user) {
-            await cerrarSesion();
-        } else {
-            const loginModal = document.getElementById("#login-modal");
-            if (loginModal) loginModal.style.display = "flex"; // Mostrar el modal de inicio de sesión
-            //loginModal.style.display = "flex"; // Mostrar el modal de inicio de sesión
-        }
-    });
-}
-
 // 🔥 Exportar `configurarModales()` para usarlo en `navbar.js`
 export function configurarModales() {
     const loginModal = document.querySelector("#login-modal");
@@ -106,12 +83,12 @@ export function configurarModales() {
     });
 }
 
-/*
+
 // 🔥 Configurar el botón de inicio/cierre de sesión
 function configurarBotonAuth() {
     const authBtn = document.getElementById("auth-btn");
     const modal = document.getElementById("login-modal");
-    const closeModal = document.querySelector(".close-btn");
+    const closeModal = document.querySelector("close-btn");
 
     if (!authBtn || !modal || !closeModal) {
         console.warn("⚠️ No se encontraron elementos para el modal.");
@@ -124,21 +101,21 @@ function configurarBotonAuth() {
         if (data.session && data.session.user) {
             await cerrarSesion();
         } else {
-            modal.style.display = "flex"; // Mostrar el modal
+            loginModal.style.display = "flex"; // Mostrar el modal
         }
     });
 
     closeModal.addEventListener("click", () => {
-        modal.style.display = "none"; // Cerrar el modal al hacer clic en la 'X'
+        loginModal.style.display = "none"; // Cerrar el modal al hacer clic en la 'X'
     });
 
     window.addEventListener("click", (event) => {
         if (event.target === modal) {
-            modal.style.display = "none"; // Cerrar si se hace clic fuera del modal
+            loginModal.style.display = "none"; // Cerrar si se hace clic fuera del modal
         }
     });
 }
-
+/*
 // Función para registrar usuario con validaciones
 async function registrarse() {
     const email = document.getElementById("register-email").value;
