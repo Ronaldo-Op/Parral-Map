@@ -1,7 +1,8 @@
 import { supabase } from "./supabase-config.js";
 
-// ✅ Ejecutar la configuración al cargar la página
-document.addEventListener("DOMContentLoaded", async () => {
+// ✅ Esperar hasta que la navbar esté completamente cargada
+document.addEventListener("navbarCargada", async () => {
+    console.log("✅ Navbar detectada. Iniciando configuración de autenticación...");
     await verificarSesion();
     configurarBotonAuth();
     configurarModales();
@@ -18,11 +19,15 @@ async function verificarSesion() {
 
         const authBtn = document.getElementById("auth-btn");
 
-        if (data.session && data.session.user) {
-            console.log("✅ Usuario autenticado:", data.session.user.email);
-            authBtn.innerText = "Cerrar Sesión";
+        if (authBtn) {
+            if (data.session && data.session.user) {
+                console.log("✅ Usuario autenticado:", data.session.user.email);
+                authBtn.innerText = "Cerrar Sesión";
+            } else {
+                authBtn.innerText = "Iniciar Sesión";
+            }
         } else {
-            authBtn.innerText = "Iniciar Sesión";
+            console.warn("⚠️ No se encontró el botón de autenticación.");
         }
     } catch (err) {
         console.error("⚠️ Error en verificarSesion():", err);
