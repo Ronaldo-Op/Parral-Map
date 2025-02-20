@@ -4,7 +4,7 @@ import { supabase } from "./supabase-config.js";
 document.addEventListener("DOMContentLoaded", async () => {
     await verificarSesion();
     configurarBotonAuth();
-    //configurarModales();
+    configurarModales();
 });
 
 /*
@@ -19,7 +19,7 @@ document.getElementById("toggle-login").addEventListener("click", function () {
     document.getElementById("login-section").style.display = "block";
 });
 */
-
+/*
 // Validación de correo electrónico
 function validarCorreo(email) {
     const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -31,7 +31,7 @@ function validarPassword(password) {
     const regex = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
     return regex.test(password);
 }
-
+*/
 // 🔥 Función para verificar sesión
 async function verificarSesion() {
     try {
