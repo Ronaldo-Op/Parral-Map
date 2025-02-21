@@ -20,6 +20,17 @@ body {
     width: 100%;
 }
 
+/* Barra de navegación */
+header {
+    background: #333;
+    color: white;
+    padding: 15px;
+    text-align: center;
+    position: relative;
+    z-index: 10; /* Asegura que la barra de navegación esté por encima */
+}
+
+
 /* Global Reset para Navbar */
 .navbar,
 .navbar * {
