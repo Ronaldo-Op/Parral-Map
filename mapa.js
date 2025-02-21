@@ -149,7 +149,7 @@ async function cargarTodasLasCalles() {
             const { data, error } = await supabase
                 .from('calles')
                 .select('*')
-                .neq('coordenadas', null)
+                .neq('coordinates', null)
                 .range(desde, desde + LIMITE_POR_PETICION - 1);
 
             if (error) {
@@ -166,14 +166,14 @@ async function cargarTodasLasCalles() {
 
         // 🔥 Crear las polilíneas en el mapa
         calles.forEach(calle => {
-            if (Array.isArray(calle.coordenadas) && calle.coordenadas.length > 0) {
-                const coordenadas = calle.coordenadas.map(coord => ({
+            if (Array.isArray(calle.coordinates) && calle.coordinates.length > 0) {
+                const coordinates = calle.coordinates.map(coord => ({
                     lat: parseFloat(coord[1]),
                     lng: parseFloat(coord[0])
                 }));
 
                 const polilinea = new google.maps.Polyline({
-                    path: coordenadas,
+                    path: coordinates,
                     geodesic: true,
                     strokeColor: calle.color || '#0000FF',
                     strokeOpacity: 0.7,
