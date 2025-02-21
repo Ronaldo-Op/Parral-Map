@@ -105,6 +105,8 @@ function cambiarColorCalle(nombreCalle) {
 
 window.onload = iniciarMapa;
 */
+import { supabase } from './supabase-config.js';
+
 let mapa;
 let polilineas = [];
 
