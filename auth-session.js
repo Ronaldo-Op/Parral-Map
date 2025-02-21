@@ -239,7 +239,7 @@ async function recuperarContrasena() {
         alert("❌ Error al enviar el correo de recuperación: " + err.message);
     }
 }
-
+/*
 // 🚀 Función para subir el archivo GeoJSON a Supabase
 async function subirGeoJSON() {
     try {
@@ -295,4 +295,4 @@ async function subirGeoJSON() {
 }
 
 // 🚀 Ejecutar la función
-subirGeoJSON();
+subirGeoJSON();*/
