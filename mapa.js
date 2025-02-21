@@ -105,6 +105,7 @@ function cambiarColorCalle(nombreCalle) {
 
 window.onload = iniciarMapa;
 */
+// 🚀 Importar la configuración de Supabase
 import { supabase } from './supabase-config.js';
 
 let mapa;
@@ -125,7 +126,11 @@ function iniciarMapa() {
 // 🚀 Función para cargar las calles desde Supabase
 async function cargarCalles() {
     try {
-        const { data, error } = await supabase.from('calles').select('*');
+        // 🔥 Obtener solo las calles con coordenadas válidas
+        const { data, error } = await supabase
+            .from('calles')
+            .select('*')
+            .neq('coordenadas', null);
 
         if (error) {
             console.error("❌ Error al cargar calles desde Supabase:", error.message);
@@ -137,19 +142,18 @@ async function cargarCalles() {
             return;
         }
 
-        console.log("✅ Datos de calles obtenidos:", data);
+        console.log(`✅ Total de calles obtenidas: ${data.length}`);
 
         // 🔥 Crear las polilíneas en el mapa
         data.forEach(calle => {
-            // 🔥 Verificar que las coordenadas sean un array válido
-            if (Array.isArray(calle.coordinates) && calle.coordinates.length > 0) {
-                const coordinates = calle.coordinates.map(coord => ({
+            if (Array.isArray(calle.coordenadas) && calle.coordenadas.length > 0) {
+                const coordenadas = calle.coordenadas.map(coord => ({
                     lat: parseFloat(coord[1]),
                     lng: parseFloat(coord[0])
                 }));
 
                 const polilinea = new google.maps.Polyline({
-                    path: coordinates,
+                    path: coordenadas,
                     geodesic: true,
                     strokeColor: calle.color || '#0000FF',
                     strokeOpacity: 0.7,
@@ -158,27 +162,6 @@ async function cargarCalles() {
                 });
 
                 polilineas.push(polilinea);
-
-                // 🔥 Evento para mostrar propiedades al hacer clic
-                google.maps.event.addListener(polilinea, 'click', async function () {
-                    const nuevoNombre = prompt("Nombre de la Calle:", calle.name);
-                    const nuevoMaxspeed = prompt("Velocidad Máxima:", calle.maxspeed);
-                    const nuevoColor = prompt("Nuevo color en HEX (#FF0000):", calle.color);
-
-                    polilinea.setOptions({ strokeColor: nuevoColor });
-
-                    const { error } = await supabase.from('calles').update({
-                        name: nuevoNombre,
-                        maxspeed: nuevoMaxspeed,
-                        color: nuevoColor
-                    }).eq('id', calle.id);
-
-                    if (error) {
-                        console.error("❌ Error al actualizar los datos:", error.message);
-                    } else {
-                        console.log("✅ Datos actualizados en Supabase.");
-                    }
-                });
             } else {
                 console.warn(`⚠️ Coordenadas inválidas para la calle: ${calle.name}`);
             }
