@@ -282,7 +282,7 @@ async function subirGeoJSON() {
                     surface: propiedades['surface'] || 'Desconocido',
                     coordinates: feature.geometry.coordinates,
                     color: '#0000FF', // Color inicial (Azul)
-                    estado: 'Desconocido'
+                    state: 'Desconocido'
                 };
             });
 
