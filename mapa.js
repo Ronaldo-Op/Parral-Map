@@ -122,57 +122,68 @@ function iniciarMapa() {
 
 // 🚀 Función para cargar las calles desde Supabase
 async function cargarCalles() {
-    const { data, error } = await supabase.from('calles').select('*');
+    try {
+        const { data, error } = await supabase.from('calles').select('*');
 
-    if (error) {
-        console.error("❌ Error al cargar calles:", error.message);
-        return;
-    }
-
-    // 🔥 Crear las polilíneas en el mapa
-    data.forEach(calle => {
-        // 🔥 Verificar que las coordenadas sean un array válido
-        if (Array.isArray(calle.coordinates) && calle.coordinates.length > 0) {
-            const coordinates = calle.coordinates.map(coord => ({
-                lat: parseFloat(coord[1]),
-                lng: parseFloat(coord[0])
-            }));
-
-            const polilinea = new google.maps.Polyline({
-                path: coordinates,
-                geodesic: true,
-                strokeColor: calle.color || '#0000FF',
-                strokeOpacity: 0.7,
-                strokeWeight: 5,
-                map: mapa
-            });
-
-            polilineas.push(polilinea);
-
-            // 🔥 Evento para mostrar propiedades al hacer clic
-            google.maps.event.addListener(polilinea, 'click', async function () {
-                const nuevoNombre = prompt("Nombre de la Calle:", calle.name);
-                const nuevoMaxspeed = prompt("Velocidad Máxima:", calle.maxspeed);
-                const nuevoColor = prompt("Nuevo color en HEX (#FF0000):", calle.color);
-
-                polilinea.setOptions({ strokeColor: nuevoColor });
-
-                const { error } = await supabase.from('calles').update({
-                    name: nuevoNombre,
-                    maxspeed: nuevoMaxspeed,
-                    color: nuevoColor
-                }).eq('id', calle.id);
-
-                if (error) {
-                    console.error("❌ Error al actualizar los datos:", error.message);
-                } else {
-                    console.log("✅ Datos actualizados en Supabase.");
-                }
-            });
-        } else {
-            console.warn(`⚠️ Coordenadas inválidas para la calle: ${calle.name}`);
+        if (error) {
+            console.error("❌ Error al cargar calles desde Supabase:", error.message);
+            return;
         }
-    });
+
+        if (data.length === 0) {
+            console.warn("⚠️ No se encontraron calles en la base de datos.");
+            return;
+        }
+
+        console.log("✅ Datos de calles obtenidos:", data);
+
+        // 🔥 Crear las polilíneas en el mapa
+        data.forEach(calle => {
+            // 🔥 Verificar que las coordenadas sean un array válido
+            if (Array.isArray(calle.coordinates) && calle.coordinates.length > 0) {
+                const coordinates = calle.coordinates.map(coord => ({
+                    lat: parseFloat(coord[1]),
+                    lng: parseFloat(coord[0])
+                }));
+
+                const polilinea = new google.maps.Polyline({
+                    path: coordinates,
+                    geodesic: true,
+                    strokeColor: calle.color || '#0000FF',
+                    strokeOpacity: 0.7,
+                    strokeWeight: 5,
+                    map: mapa
+                });
+
+                polilineas.push(polilinea);
+
+                // 🔥 Evento para mostrar propiedades al hacer clic
+                google.maps.event.addListener(polilinea, 'click', async function () {
+                    const nuevoNombre = prompt("Nombre de la Calle:", calle.name);
+                    const nuevoMaxspeed = prompt("Velocidad Máxima:", calle.maxspeed);
+                    const nuevoColor = prompt("Nuevo color en HEX (#FF0000):", calle.color);
+
+                    polilinea.setOptions({ strokeColor: nuevoColor });
+
+                    const { error } = await supabase.from('calles').update({
+                        name: nuevoNombre,
+                        maxspeed: nuevoMaxspeed,
+                        color: nuevoColor
+                    }).eq('id', calle.id);
+
+                    if (error) {
+                        console.error("❌ Error al actualizar los datos:", error.message);
+                    } else {
+                        console.log("✅ Datos actualizados en Supabase.");
+                    }
+                });
+            } else {
+                console.warn(`⚠️ Coordenadas inválidas para la calle: ${calle.name}`);
+            }
+        });
+    } catch (err) {
+        console.error("❌ Error al conectar con Supabase:", err);
+    }
 }
 
 window.onload = iniciarMapa;
