@@ -240,62 +240,74 @@ async function recuperarContrasena() {
     }
 }
 
-// 🚀 Función para subir el archivo GeoJSON a Supabase
+// 🔥 Tamaño del lote y retardo entre lotes
+const TAMANO_LOTE = 50;
+const RETARDO_ENTRE_LOTES = 1000; // 1000 ms = 1 segundo
+
+// 🚀 Función para subir el archivo GeoJSON a Supabase en lotes
 async function subirGeoJSON() {
     try {
         // 🔥 Obtener los datos de mapa.geojson
         const response = await fetch('mapa.geojson');
         const data = await response.json();
 
-        // 🔥 Recorrer las características (features) del GeoJSON
-        data.features.forEach(async (feature, index) => {
-            if (feature.geometry && feature.geometry.type === 'LineString') {
+        // 🔥 Filtrar las características (features) de tipo LineString
+        const calles = data.features.filter(feature => feature.geometry && feature.geometry.type === 'LineString');
+
+        console.log(`✅ Total de calles a insertar: ${calles.length}`);
+
+        // 🔥 Dividir las calles en lotes
+        const lotes = [];
+        for (let i = 0; i < calles.length; i += TAMANO_LOTE) {
+            lotes.push(calles.slice(i, i + TAMANO_LOTE));
+        }
+
+        // 🔥 Función para insertar un lote en Supabase
+        const insertarLote = async (lote, indiceLote) => {
+            console.log(`🚀 Insertando lote ${indiceLote + 1} de ${lotes.length}`);
+
+            // 🔥 Preparar los datos para la inserción
+            const datos = lote.map((feature, index) => {
                 const propiedades = feature.properties;
 
-                // 🔥 Obtener las propiedades
-                const osm_id = propiedades['@id'] || 'Desconocido';
-                const access = propiedades['access'] || 'Desconocido';
-                const highway = propiedades['highway'] || 'Desconocido';
-                const lanes = propiedades['lanes'] || 'Desconocido';
-                const maxspeed = propiedades['maxspeed'] || 'Desconocido';
-                const name = propiedades['name'] || `Calle_${index}`;
-                const oneway = propiedades['oneway'] || 'Desconocido';
-                const ref = propiedades['ref'] || 'Desconocido';
-                const surface = propiedades['surface'] || 'Desconocido';
-                const coordinates = feature.geometry.coordinates;
+                return {
+                    osm_id: propiedades['@id'] || 'Desconocido',
+                    access: propiedades['access'] || 'Desconocido',
+                    highway: propiedades['highway'] || 'Desconocido',
+                    lanes: propiedades['lanes'] || 'Desconocido',
+                    maxspeed: propiedades['maxspeed'] || 'Desconocido',
+                    name: propiedades['name'] || `Calle_${index}`,
+                    oneway: propiedades['oneway'] || 'Desconocido',
+                    ref: propiedades['ref'] || 'Desconocido',
+                    surface: propiedades['surface'] || 'Desconocido',
+                    coordinates: feature.geometry.coordinates,
+                    color: '#0000FF', // Color inicial (Azul)
+                    estado: 'Desconocido'
+                };
+            });
 
-                // 🔥 Verificar que las coordenadas sean válidas
-                if (Array.isArray(coordinates) && coordinates.length > 0) {
-                    // 🔥 Insertar los datos en Supabase
-                    const { error } = await supabase.from('calles').insert([
-                        {
-                            osm_id: osm_id,
-                            access: access,
-                            highway: highway,
-                            lanes: lanes,
-                            maxspeed: maxspeed,
-                            name: name,
-                            oneway: oneway,
-                            ref: ref,
-                            surface: surface,
-                            coordinates: coordinates,
-                            color: '#0000FF', // Color inicial (Azul)
-                            state: 'Desconocido'
-                        }
-                    ]);
+            // 🔥 Insertar el lote en Supabase
+            const { error } = await supabase.from('calles').insert(datos);
 
-                    if (error) {
-                        console.error(`❌ Error al insertar la calle "${name}":`, error.message);
-                    } else {
-                        console.log(`✅ Calle "${name}" insertada correctamente.`);
-                    }
-                } else {
-                    console.warn(`⚠️ Coordenadas inválidas para la calle "${name}".`);
-                }
+            if (error) {
+                console.error(`❌ Error al insertar el lote ${indiceLote + 1}:`, error.message);
             } else {
-                console.warn(`⚠️ La feature en el índice ${index} no es de tipo LineString.`);
+                console.log(`✅ Lote ${indiceLote + 1} insertado correctamente.`);
             }
-        });
+        };
+
+        // 🔥 Función para procesar los lotes con retardo entre cada uno
+        const procesarLotes = async () => {
+            for (let i = 0; i < lotes.length; i++) {
+                await insertarLote(lotes[i], i);
+                console.log(`⏳ Esperando ${RETARDO_ENTRE_LOTES / 1000} segundos antes del siguiente lote...`);
+                await new Promise(resolve => setTimeout(resolve, RETARDO_ENTRE_LOTES));
+            }
+            console.log("✅ Todas las calles han sido insertadas.");
+        };
+
+        // 🚀 Ejecutar la inserción por lotes
+        await procesarLotes();
     } catch (error) {
         console.error("❌ Error al cargar el archivo GeoJSON:", error);
     }
