@@ -239,7 +239,7 @@ async function recuperarContrasena() {
         alert("❌ Error al enviar el correo de recuperación: " + err.message);
     }
 }
-
+/*
 // 🔥 Tamaño del lote y retardo entre lotes
 const TAMANO_LOTE = 50;
 const RETARDO_ENTRE_LOTES = 1000; // 1000 ms = 1 segundo
@@ -315,3 +315,4 @@ async function subirGeoJSON() {
 
 // 🚀 Ejecutar la función
 subirGeoJSON();
+*/
