@@ -5,6 +5,28 @@ body {
     padding: 0;
     background-color: #f4f4f4;
     position: relative; /* Asegura que el menú se superponga */
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+}
+/* 🚀 Contenedor del Mapa */
+#mapa {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 100%;
+    width: 100%;
+    z-index: 1; /* 🔥 Asegura que el mapa esté al frente */
+}
+
+/* 🚀 Ajuste de Navbar */
+.navbar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 2; /* 🔥 La navbar siempre encima del mapa */
 }
 
 /* Barra de navegación */
