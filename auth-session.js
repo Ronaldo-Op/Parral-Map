@@ -239,7 +239,7 @@ async function recuperarContrasena() {
         alert("❌ Error al enviar el correo de recuperación: " + err.message);
     }
 }
-/*
+
 // 🚀 Función para subir el archivo GeoJSON a Supabase
 async function subirGeoJSON() {
     try {
@@ -248,8 +248,8 @@ async function subirGeoJSON() {
         const data = await response.json();
 
         // 🔥 Recorrer las características (features) del GeoJSON
-        data.features.forEach(async (feature) => {
-            if (feature.geometry.type === 'LineString') {
+        data.features.forEach(async (feature, index) => {
+            if (feature.geometry && feature.geometry.type === 'LineString') {
                 const propiedades = feature.properties;
 
                 // 🔥 Obtener las propiedades
@@ -258,35 +258,42 @@ async function subirGeoJSON() {
                 const highway = propiedades['highway'] || 'Desconocido';
                 const lanes = propiedades['lanes'] || 'Desconocido';
                 const maxspeed = propiedades['maxspeed'] || 'Desconocido';
-                const name = propiedades['name'] || 'Sin Nombre';
+                const name = propiedades['name'] || `Calle_${index}`;
                 const oneway = propiedades['oneway'] || 'Desconocido';
                 const ref = propiedades['ref'] || 'Desconocido';
                 const surface = propiedades['surface'] || 'Desconocido';
-                const coordinates = feature.geometry.coordinates;
+                const coordenadas = feature.geometry.coordinates;
 
-                // 🔥 Insertar los datos en Supabase
-                const { error } = await supabase.from('calles').insert([
-                    {
-                        osm_id: osm_id,
-                        access: access,
-                        highway: highway,
-                        lanes: lanes,
-                        maxspeed: maxspeed,
-                        name: name,
-                        oneway: oneway,
-                        ref: ref,
-                        surface: surface,
-                        coordinates: coordinates,
-                        color: '#0000FF', // Color inicial (Azul)
-                        state: 'Desconocido'
+                // 🔥 Verificar que las coordenadas sean válidas
+                if (Array.isArray(coordenadas) && coordenadas.length > 0) {
+                    // 🔥 Insertar los datos en Supabase
+                    const { error } = await supabase.from('calles').insert([
+                        {
+                            osm_id: osm_id,
+                            access: access,
+                            highway: highway,
+                            lanes: lanes,
+                            maxspeed: maxspeed,
+                            name: name,
+                            oneway: oneway,
+                            ref: ref,
+                            surface: surface,
+                            coordenadas: coordenadas,
+                            color: '#0000FF', // Color inicial (Azul)
+                            estado: 'Desconocido'
+                        }
+                    ]);
+
+                    if (error) {
+                        console.error(`❌ Error al insertar la calle "${name}":`, error.message);
+                    } else {
+                        console.log(`✅ Calle "${name}" insertada correctamente.`);
                     }
-                ]);
-
-                if (error) {
-                    console.error("❌ Error al insertar:", error.message);
                 } else {
-                    console.log(`✅ Calle "${name}" insertada correctamente.`);
+                    console.warn(`⚠️ Coordenadas inválidas para la calle "${name}".`);
                 }
+            } else {
+                console.warn(`⚠️ La feature en el índice ${index} no es de tipo LineString.`);
             }
         });
     } catch (error) {
@@ -295,4 +302,4 @@ async function subirGeoJSON() {
 }
 
 // 🚀 Ejecutar la función
-subirGeoJSON();*/
+subirGeoJSON();
