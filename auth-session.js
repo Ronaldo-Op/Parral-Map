@@ -262,10 +262,10 @@ async function subirGeoJSON() {
                 const oneway = propiedades['oneway'] || 'Desconocido';
                 const ref = propiedades['ref'] || 'Desconocido';
                 const surface = propiedades['surface'] || 'Desconocido';
-                const coordenadas = feature.geometry.coordinates;
+                const coordinates = feature.geometry.coordinates;
 
                 // 🔥 Verificar que las coordenadas sean válidas
-                if (Array.isArray(coordenadas) && coordenadas.length > 0) {
+                if (Array.isArray(coordinates) && coordinates.length > 0) {
                     // 🔥 Insertar los datos en Supabase
                     const { error } = await supabase.from('calles').insert([
                         {
@@ -278,7 +278,7 @@ async function subirGeoJSON() {
                             oneway: oneway,
                             ref: ref,
                             surface: surface,
-                            coordenadas: coordenadas,
+                            coordinates: coordinates,
                             color: '#0000FF', // Color inicial (Azul)
                             estado: 'Desconocido'
                         }
