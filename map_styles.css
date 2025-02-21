@@ -18,18 +18,8 @@ body {
     bottom: 0;
     height: 100%;
     width: 100%;
+    z-index: 1; /* 🔥 Asegura que el mapa esté al frente */
 }
-
-/* Barra de navegación */
-header {
-    background: #333;
-    color: white;
-    padding: 15px;
-    text-align: center;
-    position: relative;
-    z-index: 10; /* Asegura que la barra de navegación esté por encima */
-}
-
 
 /* Global Reset para Navbar */
 .navbar,
@@ -54,6 +44,7 @@ header {
     justify-content: space-between;
     align-items: center;
     flex-wrap: nowrap;
+    z-index: 2;
 }
 
 .navbar h1 {
@@ -182,4 +173,60 @@ header {
 
 .close-btn:hover {
     color: #555;
+}
+
+/* 🚀 Estilos para el Menú Lateral */
+#menu-lateral {
+    position: fixed;
+    top: 55px;
+    right: 0px; /* 🔥 Inicialmente oculto */
+    width: 20%;
+    height: 100%;
+    background-color: #f9f9f9;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    overflow-y: auto;
+    transition: right 0.3s ease;
+    z-index: 100;
+    display: block;
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+#menu-lateral h2 {
+    margin-top: 0;
+}
+
+#menu-lateral input[type="text"],
+#menu-lateral input[type="color"] {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+}
+
+#menu-lateral button {
+    width: 48%;
+    padding: 10px;
+    margin: 5px 1%;
+    box-sizing: border-box;
+    cursor: pointer;
+}
+
+#menu-lateral button#guardar-cambios {
+    background-color: #28a745;
+    color: white;
+    border: none;
+}
+
+#menu-lateral button#cerrar-menu {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+}
+
+/* 🚀 Mostrar el menú cuando está activo */
+#menu-lateral.activo {
+    right: -320px;
 }

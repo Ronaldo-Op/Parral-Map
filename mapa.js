@@ -1,110 +1,3 @@
-/*
-let mapa;
-let calles = {}; // Almacena todas las secciones de cada calle con su nombre
-let colores = ["#0000FF", "#FF0000", "#00FF00", "#FFFF00", "#00FFFF"]; // Azul, Rojo, Verde, Amarillo
-let infoWindow; // Para mostrar el nombre de la calle al pasar el cursor
-
-function iniciarMapa() {
-    mapa = new google.maps.Map(document.getElementById('mapa'), {
-        center: { lat: 26.9339, lng: -105.6664 },
-        zoom: 14,
-        disableDefaultUI: true, // Oculta controles predeterminados
-        styles: [
-            {
-                featureType: "poi", // Oculta puntos de interés (marcadores predeterminados)
-                stylers: [{ visibility: "off" }]
-            }
-        ]
-    });
-
-    // Crear el cuadro de información
-    infoWindow = new google.maps.InfoWindow();
-    mostrarInfoWindow = "";
-
-    // Cargar archivo GeoJSON con las calles
-    fetch('mapa.geojson')
-        .then(response => response.json())
-        .then(data => {
-            data.features.forEach((feature, index) => {
-                if (feature.geometry.type === 'LineString') {
-                    let coordenadas = feature.geometry.coordinates.map(coord => ({
-                        lat: coord[1],
-                        lng: coord[0]
-                    }));
-
-                    // Obtener el nombre de la calle o asignar un identificador único
-                    let nombreCalle = feature.properties.name || `Calle_${index}`;
-
-                    // Si la calle aún no existe en el objeto, inicializarla
-                    if (!calles[nombreCalle]) {
-                        calles[nombreCalle] = { polilineas: [], colorIndex: 0 };
-                    }
-
-                    // Crear la polilínea
-                    let polilinea = new google.maps.Polyline({
-                        path: coordenadas,
-                        geodesic: true,
-                        strokeColor: colores[0], // Color inicial (Azul)
-                        strokeOpacity: 0.30,
-                        strokeWeight: 7,
-                        map: mapa
-                    });
-
-                    // Almacenar la polilínea dentro del grupo de la calle
-                    calles[nombreCalle].polilineas.push(polilinea);
-
-                    // Agregar evento de clic para cambiar color de TODAS las secciones de la calle
-                    google.maps.event.addListener(polilinea, 'click', function () {
-                        cambiarColorCalle(nombreCalle);
-                    });
-
-                    // Agregar evento para mostrar el nombre de la calle al pasar el cursor
-                    google.maps.event.addListener(polilinea, 'mouseover', function (event) {
-                        if (mostrarInfoWindow) {
-                            infoWindow.setContent(nombreCalle);
-                            infoWindow.setPosition(event.latLng);
-                            infoWindow.open(mapa);
-                        }
-                    });
-
-                    // Cerrar el cuadro de información al salir de la calle
-                    google.maps.event.addListener(polilinea, 'mouseout', function () {
-                        infoWindow.close();
-                    });
-                }
-            });
-        })
-        .catch(error => console.error('Error al cargar el archivo GeoJSON:', error));
-    
-        // Detectar cambios en el checkbox para activar/desactivar InfoWindow
-    document.getElementById("toggleInfoWindow").addEventListener("change", function () {
-        mostrarInfoWindow = this.checked;
-    });
-}
-
-function toggleMenu() {
-    let menu = document.getElementById("menu");
-    menu.style.display = (menu.style.display === "block") ? "none" : "block";
-}
-
-// Función para cambiar el color de TODAS las secciones de una calle
-function cambiarColorCalle(nombreCalle) {
-    if (calles[nombreCalle]) {
-        let calle = calles[nombreCalle];
-
-        // Alternar entre los colores disponibles
-        calle.colorIndex = (calle.colorIndex + 1) % colores.length;
-        let nuevoColor = colores[calle.colorIndex];
-
-        // Cambiar el color de todas las secciones de la calle
-        calle.polilineas.forEach(polilinea => {
-            polilinea.setOptions({ strokeColor: nuevoColor });
-        });
-    }
-}
-
-window.onload = iniciarMapa;
-*/
 // 🚀 Importar la configuración de Supabase
 import { supabase } from './supabase-config.js';
 
@@ -117,7 +10,22 @@ function iniciarMapa() {
     mapa = new google.maps.Map(document.getElementById('mapa'), {
         center: { lat: 26.9339, lng: -105.6664 },
         zoom: 14,
-        mapTypeId: 'roadmap'
+        mapTypeId: 'roadmap',
+        disableDefaultUI: true, // 🔥 Muestra los controles de zoom y otros
+        styles: [
+            {
+                featureType: "poi", // 🔥 Oculta puntos de interés (marcadores predeterminados)
+                stylers: [{ visibility: "off" }]
+            },
+            {
+                featureType: "transit", // 🔥 Oculta las estaciones de transporte público
+                stylers: [{ visibility: "on" }]
+            },
+            {
+                featureType: "administrative.land_parcel", // 🔥 Oculta los límites de parcelas
+                stylers: [{ visibility: "on" }]
+            }
+        ]
     });
 
     // 🔥 Cargar todas las calles desde Supabase
@@ -182,7 +90,7 @@ async function cargarTodasLasCalles() {
                 });
 
                 polilineas.push(polilinea);
-
+/*
                 // 🔥 Agregar evento `click` para mostrar un cuadro de diálogo
                 google.maps.event.addListener(polilinea, 'click', async function () {
                     const nuevoNombre = prompt("Nombre de la Calle:", calle.name);
@@ -207,6 +115,7 @@ async function cargarTodasLasCalles() {
                         }
                     }
                 });
+                */
             } else {
                 console.warn(`⚠️ Coordenadas inválidas para la calle: ${calle.name}`);
             }
@@ -217,3 +126,86 @@ async function cargarTodasLasCalles() {
 }
 
 window.onload = iniciarMapa;
+
+// 🚀 Función para ajustar el tamaño del mapa al redimensionar la ventana
+function ajustarMapa() {
+    const contenedorMapa = document.getElementById('mapa');
+    contenedorMapa.style.height = `${window.innerHeight}px`;
+    contenedorMapa.style.width = `${window.innerWidth}px`;
+}
+
+// 🚀 Ajustar el mapa al cargar y al redimensionar la ventana
+window.addEventListener('load', ajustarMapa);
+window.addEventListener('resize', ajustarMapa);
+
+// 🚀 Variable para almacenar la calle seleccionada
+let calleSeleccionada = null;
+
+// 🚀 Función para mostrar el menú lateral con los datos de la calle
+function mostrarMenu(calle) {
+    console.log("🚀 mostrarMenu() llamado con:", calle); // 🚀 Verificar si se llama
+
+    calleSeleccionada = calle;
+
+    document.getElementById('nombre-calle').value = calle.name;
+    document.getElementById('velocidad-maxima').value = calle.maxspeed;
+    document.getElementById('color-calle').value = calle.color || '#0000FF';
+
+    const menuLateral = document.getElementById('menu-lateral');
+    menuLateral.classList.add('activo'); // 🚀 Verificar si se agrega la clase `activo`
+
+    console.log("🚀 Clase `activo` agregada a `menu-lateral`");
+}
+
+// 🚀 Función para ocultar el menú lateral
+function ocultarMenu() {
+    console.log("🚀 ocultarMenu() llamado"); // 🚀 Verificar si se llama
+    const menuLateral = document.getElementById('menu-lateral');
+    menuLateral.classList.remove('activo');
+}
+
+// 🚀 Función para actualizar eventos `click` en las polilíneas
+function actualizarEventosPolilineas() {
+    polilineas.forEach((polilinea, index) => {
+        console.log(`🚀 Asignando evento 'click' a la polilínea ${index}`);
+        google.maps.event.addListener(polilinea, 'click', function () {
+            console.log(`🚀 Click en la polilínea ${index}`);
+            mostrarMenu(polilinea.calle); // 🚀 Pasar datos de la calle a mostrarMenu()
+        });
+    });
+}
+
+// 🚀 Función para guardar los cambios en Supabase
+async function guardarCambios() {
+    const nuevoNombre = document.getElementById('nombre-calle').value;
+    const nuevoMaxspeed = document.getElementById('velocidad-maxima').value;
+    const nuevoColor = document.getElementById('color-calle').value;
+
+    const { error } = await supabase.from('calles').update({
+        name: nuevoNombre,
+        maxspeed: nuevoMaxspeed,
+        color: nuevoColor
+    }).eq('id', calleSeleccionada.id);
+
+    if (error) {
+        console.error("❌ Error al actualizar los datos:", error.message);
+    } else {
+        console.log("✅ Datos actualizados en Supabase.");
+
+        // 🔥 Actualizar los valores en la variable `calleSeleccionada`
+        calleSeleccionada.name = nuevoNombre;
+        calleSeleccionada.maxspeed = nuevoMaxspeed;
+        calleSeleccionada.color = nuevoColor;
+
+        // 🔥 Actualizar el color de la polilínea
+        polilineas.forEach(polilinea => {
+            polilinea.setOptions({ strokeColor: nuevoColor });
+        });
+
+        ocultarMenu(); // 🚀 Cerrar el menú lateral
+    }
+}
+
+// 🚀 Eventos para guardar cambios y cerrar el menú
+document.getElementById('guardar-cambios').addEventListener('click', guardarCambios);
+document.getElementById('cerrar-menu').addEventListener('click', ocultarMenu);

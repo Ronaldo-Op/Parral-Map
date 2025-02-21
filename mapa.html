@@ -19,5 +19,24 @@
 
     <!-- Script de Google Maps -->
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB-urOJWKjdZNi580rVXSnVXSJIlHMspu8"></script>
+
+    <!-- 🚀 Menú Lateral para Editar Datos de Calles -->
+    <div id="menu-lateral" class="oculto">
+        <h2>Editar Datos de la Calle</h2>
+        <form id="form-editar-calle">
+            <label for="nombre-calle">Nombre de la Calle:</label>
+            <input type="text" id="nombre-calle" name="nombre-calle" placeholder="Nombre de la Calle">
+
+            <label for="velocidad-maxima">Velocidad Máxima:</label>
+            <input type="text" id="velocidad-maxima" name="velocidad-maxima" placeholder="Velocidad Máxima">
+
+            <label for="color-calle">Color de la Calle:</label>
+            <input type="color" id="color-calle" name="color-calle">
+
+            <button type="button" id="guardar-cambios">Guardar Cambios</button>
+            <button type="button" id="cerrar-menu">Cerrar</button>
+        </form>
+    </div>
 </body>
+
 </html>
