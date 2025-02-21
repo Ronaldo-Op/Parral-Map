@@ -21,14 +21,6 @@ body {
     z-index: 1; /* 🔥 Asegura que el mapa esté al frente */
 }
 
-/* 🚀 Ajuste de Navbar */
-.navbar {
-    position: fixed;
-    top: 0;
-    width: 100%;
-    z-index: 2; /* 🔥 La navbar siempre encima del mapa */
-}
-
 /* Barra de navegación */
 header {
     background: #333;
@@ -113,14 +105,6 @@ nav ul li:hover .submenu {
 
 .submenu ul li label {
     cursor: pointer;
-}
-
-/* Contenedor del mapa */
-#mapa {
-    width: 100%;
-    height: 85vh;
-    position: relative;
-    z-index: 1; /* Asegura que el mapa no tape el menú */
 }
 
 /* Global Reset para Navbar */
