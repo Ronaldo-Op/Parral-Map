@@ -179,7 +179,7 @@ body {
 #menu-lateral {
     position: fixed;
     top: 55px;
-    right: 0px; /* 🔥 Inicialmente oculto */
+    right: -400px; /* 🔥 Inicialmente oculto */
     width: 20%;
     height: 100%;
     background-color: #f9f9f9;
@@ -228,5 +228,5 @@ body {
 
 /* 🚀 Mostrar el menú cuando está activo */
 #menu-lateral.activo {
-    right: -320px;
+    right: 0px;
 }

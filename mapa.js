@@ -71,7 +71,6 @@ async function cargarTodasLasCalles() {
         }
 
         console.log(`✅ Total de calles obtenidas: ${calles.length}`);
-
         // 🔥 Crear las polilíneas en el mapa
         calles.forEach(calle => {
             if (Array.isArray(calle.coordinates) && calle.coordinates.length > 0) {
@@ -84,38 +83,20 @@ async function cargarTodasLasCalles() {
                     path: coordinates,
                     geodesic: true,
                     strokeColor: calle.color || '#0000FF',
-                    strokeOpacity: 0.7,
-                    strokeWeight: 5,
+                    strokeOpacity: 0.5,
+                    strokeWeight: 8,
                     map: mapa
                 });
 
+                // 🚀 Asociar la polilínea con su calle correspondiente
+                polilinea.calle = calle;
                 polilineas.push(polilinea);
-/*
-                // 🔥 Agregar evento `click` para mostrar un cuadro de diálogo
-                google.maps.event.addListener(polilinea, 'click', async function () {
-                    const nuevoNombre = prompt("Nombre de la Calle:", calle.name);
-                    const nuevoMaxspeed = prompt("Velocidad Máxima:", calle.maxspeed);
-                    const nuevoColor = prompt("Nuevo color en HEX (#FF0000):", calle.color);
 
-                    // 🔥 Verificar si se ingresaron nuevos valores
-                    if (nuevoNombre || nuevoMaxspeed || nuevoColor) {
-                        polilinea.setOptions({ strokeColor: nuevoColor });
-
-                        // 🔥 Actualizar los datos en Supabase
-                        const { error } = await supabase.from('calles').update({
-                            name: nuevoNombre,
-                            maxspeed: nuevoMaxspeed,
-                            color: nuevoColor
-                        }).eq('id', calle.id);
-
-                        if (error) {
-                            console.error("❌ Error al actualizar los datos:", error.message);
-                        } else {
-                            console.log("✅ Datos actualizados en Supabase.");
-                        }
-                    }
+                // 🔥 Agregar evento `click` para mostrar el menú lateral
+                google.maps.event.addListener(polilinea, 'click', function () {
+                    console.log("🚀 Click en la polilínea"); // 🚀 Para verificar en consola
+                    mostrarMenu(calle); // 🚀 Llama a `mostrarMenu()` al hacer clic
                 });
-                */
             } else {
                 console.warn(`⚠️ Coordenadas inválidas para la calle: ${calle.name}`);
             }
@@ -197,14 +178,16 @@ async function guardarCambios() {
         calleSeleccionada.maxspeed = nuevoMaxspeed;
         calleSeleccionada.color = nuevoColor;
 
-        // 🔥 Actualizar el color de la polilínea
-        polilineas.forEach(polilinea => {
-            polilinea.setOptions({ strokeColor: nuevoColor });
-        });
+        // 🔥 Actualizar solo la polilínea seleccionada
+        const polilineaSeleccionada = polilineas.find(p => p.calle.id === calleSeleccionada.id);
+        if (polilineaSeleccionada) {
+            polilineaSeleccionada.setOptions({ strokeColor: nuevoColor });
+        }
 
         ocultarMenu(); // 🚀 Cerrar el menú lateral
     }
 }
+
 
 // 🚀 Eventos para guardar cambios y cerrar el menú
 document.getElementById('guardar-cambios').addEventListener('click', guardarCambios);
