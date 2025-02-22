@@ -50,7 +50,7 @@ body {
 .navbar h1 {
     font-size: 24px;
     flex-grow: 1;
-    text-align: left;
+    text-align: center;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -232,8 +232,8 @@ body {
     left: -200px;
     bottom: 0;
     width: 300px;
-    height: 91vh;
-    background: #ffffff;
+    height: 100%;
+    background: #1e90ff;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
     transition: left 0.3s;
     overflow-y: auto;
@@ -248,12 +248,15 @@ body {
 
 #barra-noticias h2 {
     text-align: center;
-    color: #333;
+    margin-top: 80px;
+    color: #ffffff;
 }
 
 /* 🚀 Contenedor de Publicaciones */
 #contenedor-publicaciones {
     margin-top: 15px;
+    background: #ffffff;
+    z-index: 500;
 }
 
 .publicacion {
@@ -262,6 +265,7 @@ body {
     margin: 10px 0;
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 500;
 }
 
 .publicacion h4 {
@@ -284,7 +288,7 @@ body {
 /* 🚀 Botón para Agregar Publicación */
 #boton-agregar {
     position: fixed;
-    bottom: 20px;
+    bottom: 40px;
     left: 20px;
     width: 40px;
     height: 40px;
@@ -345,23 +349,23 @@ body {
 /* 🚀 Botón para Abrir/Cerrar Noticias */
 #boton-noticias {
     position: fixed;
-    top: 55px;
+    top: 56px;
     left: -40px;
     width: 40px;
     height: 40px;
-    background: #3F51B5;
+    background: #1e90ff;
     color: white;
     border: none;
     border-radius: 0 5px 5px 0;
-    font-size: 20px;
+    font-size: 21px;
     box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
     cursor: pointer;
-    z-index: 200; /* 🔥 Mayor que la barra de noticias */
+    z-index: 30; /* 🔥 Mayor que la barra de noticias */
     transition: left 0.3s, background 0.3s;
 }
 
 #boton-noticias:hover {
-    background: #3949AB;
+    background: #ffffff;
 }
 
 /* 🚀 Ajuste de Posición al Abrir la Barra */
