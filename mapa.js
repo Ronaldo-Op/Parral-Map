@@ -122,21 +122,58 @@ window.addEventListener('resize', ajustarMapa);
 // 🚀 Variable para almacenar la calle seleccionada
 let calleSeleccionada = null;
 
-// 🚀 Función para mostrar el menú lateral con los datos de la calle
-function mostrarMenu(calle) {
-    console.log("🚀 mostrarMenu() llamado con:", calle); // 🚀 Verificar si se llama
-
-    calleSeleccionada = calle;
-
-    document.getElementById('nombre-calle').value = calle.name;
-    document.getElementById('velocidad-maxima').value = calle.maxspeed;
-    document.getElementById('color-calle').value = calle.color || '#0000FF';
-
-    const menuLateral = document.getElementById('menu-lateral');
-    menuLateral.classList.add('activo'); // 🚀 Verificar si se agrega la clase `activo`
-
-    console.log("🚀 Clase `activo` agregada a `menu-lateral`");
+// 🚀 Obtener el `UUID` del usuario logueado en Supabase
+async function obtenerUUID() {
+    const { data, error } = await supabase.auth.getSession();
+    if (error) {
+        console.error("❌ Error al obtener el UUID:", error.message);
+        return null;
+    }
+    return data.session?.user?.id || null;
 }
+
+// 🚀 Obtener el `role` del usuario desde la tabla `usuarios` en Supabase
+async function obtenerRole(uuid) {
+    const { data, error } = await supabase
+        .from('usuarios')
+        .select('role')
+        .eq('id', uuid)
+        .single();
+    
+    if (error) {
+        console.error("❌ Error al obtener el rol del usuario:", error.message);
+        return null;
+    }
+    return data.role;
+}
+
+// 🚀 Función para mostrar el menú lateral con los datos de la calle
+async function mostrarMenu(calle) {
+    console.log("🚀 mostrarMenu() llamado con:", calle); // 🚀 Para verificar en consola
+
+    const uuid = await obtenerUUID();
+    const role = await obtenerRole(uuid);
+
+    console.log("🚀 UUID del usuario:", uuid);
+    console.log("🚀 Rol del usuario:", role);
+
+    // 🔥 Verificar si el rol es `admin` antes de mostrar el menú
+    if (role === 'admin') {
+        calleSeleccionada = calle;
+
+        document.getElementById('nombre-calle').value = calle.name;
+        document.getElementById('velocidad-maxima').value = calle.maxspeed;
+        document.getElementById('color-calle').value = calle.color || '#0000FF';
+
+        const menuLateral = document.getElementById('menu-lateral');
+        menuLateral.classList.add('activo'); // 🚀 Agrega la clase `activo` solo al hacer clic
+
+        console.log("🚀 Clase `activo` agregada a `menu-lateral`");
+    } else {
+        console.log("❌ El usuario no tiene permisos para editar.");
+    }
+}
+
 
 // 🚀 Función para ocultar el menú lateral
 function ocultarMenu() {
@@ -192,3 +229,102 @@ async function guardarCambios() {
 // 🚀 Eventos para guardar cambios y cerrar el menú
 document.getElementById('guardar-cambios').addEventListener('click', guardarCambios);
 document.getElementById('cerrar-menu').addEventListener('click', ocultarMenu);
+
+// 🚀 Función para Cargar Publicaciones desde Supabase
+async function cargarPublicaciones() {
+    const { data, error } = await supabase
+        .from('noticias')
+        .select('*')
+        .order('fecha', { ascending: false });
+
+    if (error) {
+        console.error("❌ Error al cargar publicaciones:", error.message);
+        return;
+    }
+
+    const contenedor = document.getElementById('contenedor-publicaciones');
+    contenedor.innerHTML = ''; // 🔥 Limpiar publicaciones anteriores
+
+    data.forEach(publicacion => {
+        const div = document.createElement('div');
+        div.className = 'publicacion';
+        div.innerHTML = `
+            <h4>${publicacion.titulo}</h4>
+            <p>${publicacion.contenido}</p>
+            <span class="fecha">${new Date(publicacion.fecha).toLocaleString()}</span>
+        `;
+        contenedor.appendChild(div);
+    });
+}
+
+// 🚀 Función para Guardar Nueva Publicación en Supabase
+async function guardarPublicacion() {
+    const titulo = document.getElementById('titulo-publicacion').value;
+    const contenido = document.getElementById('contenido-publicacion').value;
+
+    if (!titulo || !contenido) {
+        alert("❌ Completa todos los campos.");
+        return;
+    }
+
+    const { error } = await supabase
+        .from('noticias')
+        .insert([{ titulo, contenido, fecha: new Date().toISOString() }]);
+
+    if (error) {
+        console.error("❌ Error al guardar la publicación:", error.message);
+    } else {
+        document.getElementById('titulo-publicacion').value = '';
+        document.getElementById('contenido-publicacion').value = '';
+        cargarPublicaciones();
+    }
+
+    cerrarModal();
+}
+
+// 🚀 Inicialización y Eventos
+window.addEventListener('load', () => {
+    cargarPublicaciones();
+    document.getElementById('boton-agregar').addEventListener('click', abrirModal);
+    document.getElementById('guardar-publicacion').addEventListener('click', guardarPublicacion);
+    document.getElementById('cerrar-modal').addEventListener('click', cerrarModal);
+});
+
+// 🚀 Función para Alternar la Barra de Noticias
+function alternarBarraNoticias() {
+    const barraNoticias = document.getElementById('barra-noticias');
+    const botonNoticias = document.getElementById('boton-noticias');
+
+    barraNoticias.classList.toggle('activo');
+
+    // 🚀 Ajustar la posición del botón
+    if (barraNoticias.classList.contains('activo')) {
+        botonNoticias.style.right = '-40px'; // 🔥 Botón al borde derecho de la barra
+        botonNoticias.innerText = '📰'; // 🔥 Ícono para cerrar
+    } else {
+        botonNoticias.style.right = '-300px'; // 🔥 Botón oculto fuera de la pantalla
+        botonNoticias.innerText = '📰'; // 🔥 Ícono para abrir
+    }
+}
+
+// 🚀 Evento para el Botón de Noticias
+window.addEventListener('load', () => {
+    const botonNoticias = document.getElementById('boton-noticias');
+    botonNoticias.addEventListener('click', alternarBarraNoticias);
+});
+// 🚀 Cerrar Noticias al Hacer Clic Fuera de la Sección
+window.addEventListener('click', (event) => {
+    const barraNoticias = document.getElementById('barra-noticias');
+    const botonNoticias = document.getElementById('boton-noticias');
+
+    // 🚀 Verificar si el clic fue fuera de la barra de noticias y del botón
+    if (!barraNoticias.contains(event.target) && event.target !== botonNoticias) {
+        cerrarBarraNoticias();
+    }
+});
+
+// 🚀 Función para Cerrar la Barra de Noticias
+function cerrarBarraNoticias() {
+    const barraNoticias = document.getElementById('barra-noticias');
+    barraNoticias.classList.remove('activo');
+}

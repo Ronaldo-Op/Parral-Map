@@ -18,7 +18,7 @@ body {
     bottom: 0;
     height: 100%;
     width: 100%;
-    z-index: 1; /* 🔥 Asegura que el mapa esté al frente */
+    z-index: 1;
 }
 
 /* Global Reset para Navbar */
@@ -44,7 +44,7 @@ body {
     justify-content: space-between;
     align-items: center;
     flex-wrap: nowrap;
-    z-index: 2;
+    z-index: 50;
 }
 
 .navbar h1 {
@@ -178,7 +178,7 @@ body {
 /* 🚀 Estilos para el Menú Lateral */
 #menu-lateral {
     position: fixed;
-    top: 55px;
+    top: 0px;
     right: -400px; /* 🔥 Inicialmente oculto */
     width: 20%;
     height: 100%;
@@ -187,7 +187,7 @@ body {
     padding: 20px;
     overflow-y: auto;
     transition: right 0.3s ease;
-    z-index: 100;
+    z-index: -1;
     display: block;
     opacity: 1;
     visibility: visible;
@@ -220,13 +220,155 @@ body {
     border: none;
 }
 
-#menu-lateral button#cerrar-menu {
-    background-color: #dc3545;
-    color: white;
-    border: none;
-}
-
 /* 🚀 Mostrar el menú cuando está activo */
 #menu-lateral.activo {
     right: 0px;
+    z-index: 40;
+}
+
+/* 🚀 Barra Desplegable de Noticias */
+#barra-noticias {
+    position: fixed;
+    left: -200px;
+    bottom: 0;
+    width: 300px;
+    height: 91vh;
+    background: #ffffff;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+    transition: left 0.3s;
+    overflow-y: auto;
+    z-index: -1;
+    padding: 15px;
+}
+
+#barra-noticias.activo {
+    left: 0;
+    z-index: 40;
+}
+
+#barra-noticias h2 {
+    text-align: center;
+    color: #333;
+}
+
+/* 🚀 Contenedor de Publicaciones */
+#contenedor-publicaciones {
+    margin-top: 15px;
+}
+
+.publicacion {
+    background: #f5f5f5;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.publicacion h4 {
+    margin: 0;
+    color: #444;
+}
+
+.publicacion p {
+    margin: 5px 0;
+    color: #555;
+}
+
+.publicacion span.fecha {
+    display: block;
+    font-size: 0.8em;
+    color: #888;
+    text-align: right;
+}
+
+/* 🚀 Botón para Agregar Publicación */
+#boton-agregar {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    width: 40px;
+    height: 40px;
+    background: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    font-size: 24px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+#boton-agregar:hover {
+    background: #45A049;
+}
+
+/* 🚀 Modal para Crear Nueva Publicación */
+#modal-publicacion {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    z-index: 200;
+}
+
+#modal-publicacion h3 {
+    margin-top: 0;
+}
+
+#modal-publicacion input[type="text"],
+#modal-publicacion textarea {
+    width: 100%;
+    margin: 10px 0;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+#modal-publicacion button {
+    padding: 8px 12px;
+    border: none;
+    color: white;
+    background: #4CAF50;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+#modal-publicacion button:hover {
+    background: #45A049;
+}
+
+/* 🚀 Botón para Abrir/Cerrar Noticias */
+#boton-noticias {
+    position: fixed;
+    top: 55px;
+    left: -40px;
+    width: 40px;
+    height: 40px;
+    background: #3F51B5;
+    color: white;
+    border: none;
+    border-radius: 0 5px 5px 0;
+    font-size: 20px;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    z-index: 200; /* 🔥 Mayor que la barra de noticias */
+    transition: left 0.3s, background 0.3s;
+}
+
+#boton-noticias:hover {
+    background: #3949AB;
+}
+
+/* 🚀 Ajuste de Posición al Abrir la Barra */
+#barra-noticias.activo + #boton-noticias {
+    left: 329px;
+}
+
+#barra-noticias:not(.activo) + #boton-noticias {
+    left: 0;
 }
