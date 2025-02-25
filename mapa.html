@@ -45,7 +45,7 @@
         <div id="contenedor-publicaciones"></div>
         
         <!-- 🚀 Botón para Agregar Publicación -->
-        <button id="boton-agregar" title="Agregar Publicación">+</button>
+        <button id="boton-agregar-noticia" title="Agregar Noticia">+</button>
     </div>
     
     <button id="boton-noticias" title="Noticias">📰</button>
@@ -58,6 +58,24 @@
         <button id="guardar-publicacion">Publicar</button>
         <button id="cerrar-modal">Cerrar</button>
     </div>
+
+    <!-- 🚀 Modal para Crear Nueva Noticia -->
+<div id="modal-noticia" class="modal">
+    <div class="modal-contenido">
+        <h2>Nueva Noticia</h2>
+        <input type="text" id="titulo-noticia" placeholder="Título de la Noticia">
+        
+        <!-- 🚀 Campo para Imagen -->
+        <input type="file" id="imagen-noticia" accept="image/*">
+        
+        <!-- 🚀 Campo para Descripción -->
+        <textarea id="descripcion-noticia" placeholder="Descripción de la Noticia"></textarea>
+        
+        <!-- 🚀 Botones de Acción -->
+        <button id="publicar-noticia">Publicar</button>
+        <button id="cancelar-noticia">Cancelar</button>
+    </div>
+</div>
 </body>
 
 </html>

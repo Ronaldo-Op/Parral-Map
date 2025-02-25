@@ -285,6 +285,14 @@ body {
     text-align: right;
 }
 
+/* 🚀 Estilo para la Imagen en la Publicación */
+.imagen-publicacion {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin-top: 10px;
+}
+
 /* 🚀 Botón para Agregar Publicación */
 #boton-agregar {
     position: fixed;
@@ -375,4 +383,85 @@ body {
 
 #barra-noticias:not(.activo) + #boton-noticias {
     left: 0;
+}
+
+/* 🚀 Botón para Agregar Noticia */
+#boton-agregar-noticia {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    width: 50px;
+    height: 50px;
+    background: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    font-size: 30px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    transition: background 0.3s;
+    z-index: 300;
+}
+
+#boton-agregar-noticia:hover {
+    background: #45A049;
+}
+
+/* 🚀 Modal para Nueva Noticia */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 400;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-contenido {
+    background: white;
+    padding: 20px;
+    width: 90%;
+    max-width: 500px;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.modal-contenido h2 {
+    text-align: center;
+}
+
+.modal-contenido input[type="text"],
+.modal-contenido textarea,
+.modal-contenido input[type="file"] {
+    width: 100%;
+    margin: 10px 0;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.modal-contenido button {
+    padding: 10px;
+    margin-top: 10px;
+    border: none;
+    color: white;
+    background: #4CAF50;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.modal-contenido button:hover {
+    background: #45A049;
+}
+
+.modal-contenido button#cancelar-noticia {
+    background: #F44336;
+}
+
+.modal-contenido button#cancelar-noticia:hover {
+    background: #E53935;
 }

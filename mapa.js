@@ -328,3 +328,140 @@ function cerrarBarraNoticias() {
     const barraNoticias = document.getElementById('barra-noticias');
     barraNoticias.classList.remove('activo');
 }
+
+// 🚀 Función para Abrir el Modal de Nueva Noticia
+function abrirModalNoticia() {
+    const modal = document.getElementById('modal-noticia');
+    modal.style.display = 'flex';
+}
+
+// 🚀 Función para Cerrar el Modal de Nueva Noticia
+function cerrarModalNoticia() {
+    const modal = document.getElementById('modal-noticia');
+    modal.style.display = 'none';
+}
+
+// 🚀 Eventos para el Botón de Agregar Noticia y Cancelar
+window.addEventListener('load', () => {
+    const botonAgregarNoticia = document.getElementById('boton-agregar-noticia');
+    const botonCancelarNoticia = document.getElementById('cancelar-noticia');
+    
+    botonAgregarNoticia.addEventListener('click', abrirModalNoticia);
+    botonCancelarNoticia.addEventListener('click', cerrarModalNoticia);
+});
+
+// 🚀 Función para Esperar un Tiempo Específico
+const esperar = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
+// 🚀 Función para Subir Imagen a Supabase Storage (URL Manual)
+async function subirImagen(file) {
+    // 🔥 Normalizar el Nombre del Archivo
+    const nombreArchivo = `${Date.now()}_${file.name}`
+        .toLowerCase()
+        .replace(/\s+/g, '_')   // Reemplazar espacios por guiones bajos
+        .replace(/[^a-z0-9_.-]/g, ''); // Eliminar caracteres especiales
+
+    console.log("🟡 Nombre del archivo normalizado:", nombreArchivo);
+
+    const { data, error } = await supabase
+        .storage
+        .from('imagenes-noticias')
+        .upload(nombreArchivo, file);
+
+    if (error) {
+        console.error("❌ Error al subir la imagen:", error.message);
+        return null;
+    } else {
+        console.log("✅ Imagen subida correctamente:", data);
+    }
+
+    // 🔥 Añadir un pequeño retraso antes de obtener la URL
+    console.log("⏳ Esperando 1 segundo para obtener la URL...");
+    await esperar(1000); // Esperar 1 segundo (1000 ms)
+
+    // 🚀 Construir la URL pública manualmente
+    const supabaseUrl = 'https://hhkclunpavbswlethwry.supabase.co';
+    const publicURL = `${supabaseUrl}/storage/v1/object/public/imagenes-noticias/${nombreArchivo}`;
+    console.log("✅ URL pública generada manualmente:", publicURL);
+
+    return publicURL;
+}
+
+// 🚀 Función Depurada para Guardar Nueva Noticia en Supabase
+async function guardarNoticia() {
+    const titulo = document.getElementById('titulo-noticia').value;
+    const contenido = document.getElementById('descripcion-noticia').value;
+    const imagenInput = document.getElementById('imagen-noticia');
+    let imagenURL = null;
+
+    // 🚀 Validación de Campos
+    if (!titulo || !contenido) {
+        alert("❌ Completa todos los campos.");
+        return;
+    }
+
+    // 🚀 Verificar si hay una imagen seleccionada
+    if (imagenInput.files.length > 0) {
+        const imagen = imagenInput.files[0];
+        imagenURL = await subirImagen(imagen);
+
+        if (!imagenURL) {
+            alert("❌ Error al subir la imagen.");
+            console.error("❌ No se obtuvo una URL de imagen válida.");
+            return;
+        } else {
+            console.log("✅ URL de la imagen obtenida:", imagenURL);
+        }
+    } else {
+        console.log("ℹ️ No se seleccionó ninguna imagen.");
+    }
+
+    // 🚀 Obtener ID del Usuario Autenticado
+    const { data: usuario, error: errorUsuario } = await supabase.auth.getUser();
+    if (errorUsuario) {
+        console.error("❌ Error al obtener el usuario:", errorUsuario.message);
+        return;
+    }
+
+    const autor = usuario?.user?.id || null;
+
+    // 🔥 Verificación antes de Insertar
+    console.log("🔍 Datos a Insertar:", {
+        titulo,
+        contenido,
+        imagen_url: imagenURL,
+        autor,
+        fecha: new Date().toISOString()
+    });
+
+    // 🚀 Insertar Noticia en Supabase
+    const { error } = await supabase
+        .from('noticias')
+        .insert([{ 
+            titulo, 
+            contenido, 
+            imagen_url: imagenURL, 
+            autor, 
+            fecha: new Date().toISOString() 
+        }]);
+
+    if (error) {
+        console.error("❌ Error al guardar la noticia:", error.message);
+        alert("❌ Error al guardar la noticia.");
+    } else {
+        alert("✅ Noticia publicada con éxito.");
+        document.getElementById('titulo-noticia').value = '';
+        document.getElementById('descripcion-noticia').value = '';
+        document.getElementById('imagen-noticia').value = '';
+        cerrarModalNoticia();
+        cargarPublicaciones(); // 🔥 Recargar lista de noticias
+    }
+}
+
+
+
+// 🚀 Evento para el Botón de Publicar Noticia
+window.addEventListener('load', () => {
+    const botonPublicar = document.getElementById('publicar-noticia');
+    botonPublicar.addEventListener('click', guardarNoticia);
+});
