@@ -202,7 +202,7 @@ body {
     position: fixed;
     top: 0px;
     right: -400px; /* 🔥 Inicialmente oculto */
-    width: 20%;
+    width: 200px;
     height: 100%;
     background-color: #f9f9f9;
     box-shadow: -2px 0 5px rgba(0, 0, 0, 0.2);
@@ -217,7 +217,7 @@ body {
 }
 
 #menu-lateral h2 {
-    margin-top: 0;
+    margin-top: 50px;
 }
 
 #menu-lateral input[type="text"],
@@ -240,6 +240,15 @@ body {
     background-color: #28a745;
     color: white;
     border: none;
+    width: 100%;
+}
+
+#menu-lateral button#cerrar-menu {
+    background-color: #d52929;
+    color: white;
+    border: none;
+    width: 100%;
+    align-self: center;
 }
 
 /* 🚀 Mostrar el menú cuando está activo */
@@ -274,39 +283,6 @@ body {
     color: #ffffff;
 }
 
-/* 🚀 Contenedor de Publicaciones 
-#contenedor-publicaciones {
-    margin-top: 15px;
-    background: #ffffff;
-    z-index: 500;
-}
-
-.publicacion {
-    background: #f5f5f5;
-    padding: 10px;
-    margin: 10px 0;
-    border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    z-index: 500;
-}
-
-.publicacion h4 {
-    margin: 0;
-    color: #444;
-}
-
-.publicacion p {
-    margin: 5px 0;
-    color: #555;
-}
-
-.publicacion span.fecha {
-    display: block;
-    font-size: 0.8em;
-    color: #888;
-    text-align: right;
-}
-*/
 /* 🚀 Estilo para la Imagen en la Publicación */
 .imagen-publicacion {
     width: 100%;
@@ -409,24 +385,34 @@ body {
 
 /* 🚀 Botón para Agregar Noticia */
 #boton-agregar-noticia {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 20px;
+    background-color: #4CAF50;  /* Verde vibrante */
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 25px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
     position: fixed;
     bottom: 20px;
-    left: 20px;
-    width: 50px;
-    height: 50px;
-    background: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 50%;
-    font-size: 30px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    cursor: pointer;
-    transition: background 0.3s;
-    z-index: 300;
+    left: 50px;
+    z-index: 1000;
+    width: 200px;
+}
+
+.boton-agregar-noticia i {
+    margin-right: 8px;
 }
 
 #boton-agregar-noticia:hover {
-    background: #45A049;
+    background-color: #45a049; /* Verde más oscuro al pasar el cursor */
+    transform: translateY(-3px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
 }
 
 /* 🚀 Modal para Nueva Noticia */
