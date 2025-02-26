@@ -5,6 +5,141 @@ let mapa;
 let polilineas = [];
 const LIMITE_POR_PETICION = 1000; // 🔥 Máximo permitido por Supabase
 
+// 🚀 Estilo Mejorado para Google Maps
+const estiloMapa = [
+    {
+        "elementType": "geometry",
+        "stylers": [
+            { "color": "#fdfdfd" } // Fondo blanco suave
+        ]
+    },
+    {
+        "elementType": "labels.icon",
+        "stylers": [
+            { "visibility": "off" }
+        ]
+    },
+    {
+        "elementType": "labels.text.fill",
+        "stylers": [
+            { "color": "#616161" } // Texto en gris oscuro
+        ]
+    },
+    {
+        "elementType": "labels.text.stroke",
+        "stylers": [
+            { "color": "#fdfdfd" } // Fondo blanco suave para texto
+        ]
+    },
+    {
+        "featureType": "administrative.land_parcel",
+        "elementType": "labels.text.fill",
+        "stylers": [
+            { "color": "#bdbdbd" } // Parcelas en gris claro
+        ]
+    },
+    {
+        "featureType": "poi",
+        "elementType": "geometry",
+        "stylers": [
+            { "color": "#e0e0e0" } // Lugares de interés en gris suave
+        ]
+    },
+    {
+        "featureType": "poi",
+        "elementType": "labels.text.fill",
+        "stylers": [
+            { "color": "#757575" }
+        ]
+    },
+    {
+        "featureType": "poi.park",
+        "elementType": "geometry",
+        "stylers": [
+            { "color": "#d5e8a4" } // Zonas verdes en verde suave
+        ]
+    },
+    {
+        "featureType": "poi.park",
+        "elementType": "labels.text.fill",
+        "stylers": [
+            { "color": "#9e9e9e" }
+        ]
+    },
+    {
+        "featureType": "road",
+        "elementType": "geometry",
+        "stylers": [
+            { "color": "#c6c6c6" } // Calles en blanco puro
+        ]
+    },
+    {
+        "featureType": "road.arterial",
+        "elementType": "geometry",
+        "stylers": [
+            { "color": "#dadada" } // Calles arteriales en gris claro
+        ]
+    },
+    {
+        "featureType": "road.arterial",
+        "elementType": "labels.text.fill",
+        "stylers": [
+            { "color": "#c6c6c6" } // Texto en gris oscuro
+        ]
+    },
+    {
+        "featureType": "road.highway",
+        "elementType": "geometry",
+        "stylers": [
+            { "color": "#c6c6c6" } // Carreteras en gris oscuro
+        ]
+    },
+    {
+        "featureType": "road.highway",
+        "elementType": "labels.text.fill",
+        "stylers": [
+            { "color": "#616161" }
+        ]
+    },
+    {
+        "featureType": "road.local",
+        "elementType": "labels.text.fill",
+        "stylers": [
+            { "color": "#9e9e9e" }
+        ]
+    },
+    {
+        "featureType": "transit.line",
+        "elementType": "geometry",
+        "stylers": [
+            { "color": "#e0e0e0" }
+        ]
+    },
+    {
+        "featureType": "transit.station",
+        "elementType": "geometry",
+        "stylers": [
+            { "color": "#eeeeee" }
+        ]
+    },
+    {
+        "featureType": "water",
+        "elementType": "geometry",
+        "stylers": [
+            { "color": "#a2d5f2" } // Áreas acuáticas en azul claro
+        ]
+    },
+    {
+        "featureType": "water",
+        "elementType": "labels.text.fill",
+        "stylers": [
+            { "color": "#929292" }
+        ]
+    }
+];
+
+
+
 // 🚀 Iniciar el mapa de Google Maps
 function iniciarMapa() {
     mapa = new google.maps.Map(document.getElementById('mapa'), {
@@ -12,20 +147,7 @@ function iniciarMapa() {
         zoom: 14,
         mapTypeId: 'roadmap',
         disableDefaultUI: true, // 🔥 Muestra los controles de zoom y otros
-        styles: [
-            {
-                featureType: "poi", // 🔥 Oculta puntos de interés (marcadores predeterminados)
-                stylers: [{ visibility: "off" }]
-            },
-            {
-                featureType: "transit", // 🔥 Oculta las estaciones de transporte público
-                stylers: [{ visibility: "on" }]
-            },
-            {
-                featureType: "administrative.land_parcel", // 🔥 Oculta los límites de parcelas
-                stylers: [{ visibility: "on" }]
-            }
-        ]
+        styles: estiloMapa
     });
 
     // 🔥 Cargar todas las calles desde Supabase
@@ -84,7 +206,7 @@ async function cargarTodasLasCalles() {
                     geodesic: true,
                     strokeColor: calle.color || '#0000FF',
                     strokeOpacity: 0.5,
-                    strokeWeight: 8,
+                    strokeWeight: 3,
                     map: mapa
                 });
 
@@ -230,9 +352,20 @@ async function guardarCambios() {
 document.getElementById('guardar-cambios').addEventListener('click', guardarCambios);
 document.getElementById('cerrar-menu').addEventListener('click', ocultarMenu);
 
-// 🚀 Función para Cargar Publicaciones desde Supabase
+// 🚀 Función para Cargar Publicaciones con Imagen en el Feed (Estilo Moderno)
 async function cargarPublicaciones() {
-    const { data, error } = await supabase
+    const publicacionesContainer = document.getElementById('contenedor-publicaciones');
+
+    // 🔥 Verificar si el contenedor existe
+    if (!publicacionesContainer) {
+        console.error("❌ Error: No se encontró el contenedor de publicaciones.");
+        return;
+    }
+
+    publicacionesContainer.innerHTML = ''; // Limpiar contenido previo
+
+    // 🚀 Obtener publicaciones de Supabase
+    const { data: publicaciones, error } = await supabase
         .from('noticias')
         .select('*')
         .order('fecha', { ascending: false });
@@ -242,20 +375,48 @@ async function cargarPublicaciones() {
         return;
     }
 
-    const contenedor = document.getElementById('contenedor-publicaciones');
-    contenedor.innerHTML = ''; // 🔥 Limpiar publicaciones anteriores
+    // 🚀 Mostrar publicaciones en el feed
+    publicaciones.forEach(publicacion => {
+        const card = document.createElement('div');
+        card.classList.add('card-publicacion');
 
-    data.forEach(publicacion => {
-        const div = document.createElement('div');
-        div.className = 'publicacion';
-        div.innerHTML = `
-            <h4>${publicacion.titulo}</h4>
-            <p>${publicacion.contenido}</p>
-            <span class="fecha">${new Date(publicacion.fecha).toLocaleString()}</span>
+        const header = document.createElement('div');
+        header.classList.add('card-header');
+        header.innerHTML = `<h3>${publicacion.titulo}</h3>`;
+        card.appendChild(header);
+
+        // 🔥 Mostrar la imagen solo si existe una URL válida
+        if (publicacion.imagen_url) {
+            const imagen = document.createElement('img');
+            imagen.src = publicacion.imagen_url;
+            imagen.alt = publicacion.titulo;
+            imagen.classList.add('imagen-publicacion');
+            card.appendChild(imagen);
+        }
+
+        const contenido = document.createElement('p');
+        contenido.innerText = publicacion.contenido;
+        contenido.classList.add('card-contenido');
+        card.appendChild(contenido);
+
+        const fecha = document.createElement('small');
+        fecha.innerText = new Date(publicacion.fecha).toLocaleString();
+        fecha.classList.add('card-fecha');
+        card.appendChild(fecha);
+
+        // 🚀 Botones de interacción
+        const interacciones = document.createElement('div');
+        interacciones.classList.add('card-interacciones');
+        interacciones.innerHTML = `
+            <button class="btn-interaccion"><i class="fa fa-heart"></i> Me gusta</button>
+            <button class="btn-interaccion"><i class="fa fa-comment"></i> Comentar</button>
         `;
-        contenedor.appendChild(div);
+        card.appendChild(interacciones);
+
+        publicacionesContainer.appendChild(card);
     });
 }
+
 
 // 🚀 Función para Guardar Nueva Publicación en Supabase
 async function guardarPublicacion() {
@@ -285,9 +446,9 @@ async function guardarPublicacion() {
 // 🚀 Inicialización y Eventos
 window.addEventListener('load', () => {
     cargarPublicaciones();
-    document.getElementById('boton-agregar').addEventListener('click', abrirModal);
-    document.getElementById('guardar-publicacion').addEventListener('click', guardarPublicacion);
-    document.getElementById('cerrar-modal').addEventListener('click', cerrarModal);
+    //document.getElementById('boton-agregar').addEventListener('click', abrirModal);
+    //document.getElementById('guardar-publicacion').addEventListener('click', guardarPublicacion);
+    //document.getElementById('cerrar-modal').addEventListener('click', cerrarModal);
 });
 
 // 🚀 Función para Alternar la Barra de Noticias
@@ -350,9 +511,6 @@ window.addEventListener('load', () => {
     botonCancelarNoticia.addEventListener('click', cerrarModalNoticia);
 });
 
-// 🚀 Función para Esperar un Tiempo Específico
-const esperar = (ms) => new Promise(resolve => setTimeout(resolve, ms));
-
 // 🚀 Función para Subir Imagen a Supabase Storage (URL Manual)
 async function subirImagen(file) {
     // 🔥 Normalizar el Nombre del Archivo
@@ -374,10 +532,6 @@ async function subirImagen(file) {
     } else {
         console.log("✅ Imagen subida correctamente:", data);
     }
-
-    // 🔥 Añadir un pequeño retraso antes de obtener la URL
-    console.log("⏳ Esperando 1 segundo para obtener la URL...");
-    await esperar(1000); // Esperar 1 segundo (1000 ms)
 
     // 🚀 Construir la URL pública manualmente
     const supabaseUrl = 'https://hhkclunpavbswlethwry.supabase.co';
@@ -457,8 +611,6 @@ async function guardarNoticia() {
         cargarPublicaciones(); // 🔥 Recargar lista de noticias
     }
 }
-
-
 
 // 🚀 Evento para el Botón de Publicar Noticia
 window.addEventListener('load', () => {

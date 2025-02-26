@@ -9,6 +9,28 @@ body {
     width: 100%;
     overflow: hidden;
 }
+
+/* 🚀 Estilo para la Barra de Desplazamiento (Scroll) */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+    background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.3);
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+::-webkit-scrollbar-track {
+    background-color: transparent;
+}
+
 /* 🚀 Contenedor del Mapa */
 #mapa {
     position: absolute;
@@ -229,7 +251,7 @@ body {
 /* 🚀 Barra Desplegable de Noticias */
 #barra-noticias {
     position: fixed;
-    left: -200px;
+    left: -400px;
     bottom: 0;
     width: 300px;
     height: 100%;
@@ -252,7 +274,7 @@ body {
     color: #ffffff;
 }
 
-/* 🚀 Contenedor de Publicaciones */
+/* 🚀 Contenedor de Publicaciones 
 #contenedor-publicaciones {
     margin-top: 15px;
     background: #ffffff;
@@ -284,7 +306,7 @@ body {
     color: #888;
     text-align: right;
 }
-
+*/
 /* 🚀 Estilo para la Imagen en la Publicación */
 .imagen-publicacion {
     width: 100%;
@@ -464,4 +486,70 @@ body {
 
 .modal-contenido button#cancelar-noticia:hover {
     background: #E53935;
+}
+
+/* 🚀 Estilo Moderno para Publicaciones */
+.card-publicacion {
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin: 15px 0;
+    padding: 15px;
+    transition: transform 0.2s;
+    max-width: 600px;
+    overflow: hidden;
+}
+
+.card-publicacion:hover {
+    transform: translateY(-5px);
+}
+
+.card-header h3 {
+    font-size: 1.5em;
+    color: #333333;
+    margin-bottom: 10px;
+}
+
+.imagen-publicacion {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin-top: 10px;
+    transition: transform 0.3s;
+}
+
+.imagen-publicacion:hover {
+    transform: scale(1.02);
+}
+
+.card-contenido {
+    color: #555555;
+    margin-top: 10px;
+    line-height: 1.6;
+}
+
+.card-fecha {
+    display: block;
+    color: #999999;
+    font-size: 0.9em;
+    margin-top: 5px;
+}
+
+.card-interacciones {
+    margin-top: 15px;
+    display: flex;
+    justify-content: space-around;
+}
+
+.btn-interaccion {
+    background: transparent;
+    border: none;
+    color: #007BFF;
+    font-size: 1em;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.btn-interaccion:hover {
+    color: #0056b3;
 }
