@@ -104,7 +104,7 @@ body {
     margin: 0;
     padding: 0;
     background-color: #f5f7fa;
-    background-image: url('fondo.jpg'); /* Imagen de fondo */
+    background-image: url('https://hhkclunpavbswlethwry.supabase.co/storage/v1/object/public/imagenes-noticias//1740537887897_captura_de_pantalla_2025-02-25_204347.png'); /* Imagen de fondo */
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
