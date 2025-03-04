@@ -170,6 +170,7 @@ async function cargarNoticias() {
             const marker = new AdvancedMarkerElement({
                 position: { lat: noticia.latitud, lng: noticia.longitud },
                 map: mapa,
+                gmpClickable: true,
             });
 
             // Acceder al contenedor del marcador para agregar eventos
