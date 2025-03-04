@@ -176,13 +176,13 @@ async function cargarNoticias() {
             // Acceder al contenedor del marcador para agregar eventos
             const markerElement = marker.element;
 
-            if (markerElement) {
+            if (markerElement) {/*
                 markerElement.addEventListener("mouseenter", (event) => {
                     mostrarTooltip(event, noticia);
                 });
 
                 markerElement.addEventListener("mouseleave", ocultarTooltip);
-
+*/
                 markerElement.addEventListener("click", (event) => {
                     mostrarTooltip(event, noticia, true);
                 });
