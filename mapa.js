@@ -284,7 +284,7 @@ async function mostrarMenu(calle) {
         calleSeleccionada = calle;
 
         document.getElementById('nombre-calle').value = calle.name;
-        document.getElementById('velocidad-maxima').value = calle.maxspeed;
+        document.getElementById('velocidad-maxima').value = calle.osm_id;
         document.getElementById('color-calle').value = calle.color || '#0000FF';
 
         const menuLateral = document.getElementById('menu-lateral');
@@ -473,6 +473,7 @@ window.addEventListener('load', () => {
     const botonNoticias = document.getElementById('boton-noticias');
     botonNoticias.addEventListener('click', alternarBarraNoticias);
 });
+
 // 🚀 Cerrar Noticias al Hacer Clic Fuera de la Sección
 window.addEventListener('click', (event) => {
     const barraNoticias = document.getElementById('barra-noticias');
