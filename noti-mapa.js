@@ -143,8 +143,7 @@ function iniciarMapa() {
         center: { lat: 26.9339, lng: -105.6664 },
         zoom: 13,
         mapTypeId: 'roadmap',
-        mapId: 'DEMO_MAP_ID',
-        styles: estiloMapa,
+        mapId: '2be7a20d7d4279a',
         disableDefaultUI: true
     });
 
@@ -214,6 +213,10 @@ async function cargarNoticias() {
                 });
 
                 markerElement.addEventListener("mouseleave", ocultarTooltip);
+
+                markerElement.addEventListener("click", (event) => {
+                    mostrarTooltip(event, noticia, true);
+                });
             }
         });
 
