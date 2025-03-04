@@ -183,7 +183,7 @@ async function cargarNoticias() {
 
                 markerElement.addEventListener("mouseleave", ocultarTooltip);
 */
-                markerElement.addEventListener("click", (event) => {
+                markerElement.addListener("click", (event) => {
                     mostrarTooltip(event, noticia, true);
                 });
             }
@@ -325,6 +325,7 @@ const tooltip = document.getElementById("noticiaTooltip");
 
 // Función para mostrar la tarjeta con información
 function mostrarTooltip(event, noticia, esClick = false) {
+    let e = event.domEvent || window.event; // Maneja eventos en móviles y desktop
     tooltip.innerHTML = `
         <strong>${noticia.titulo}</strong>
         <p>${noticia.descripcion}</p>
