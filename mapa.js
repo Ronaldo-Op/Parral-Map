@@ -3,7 +3,7 @@ import { supabase } from './supabase-config.js';
 
 let mapa;
 let polilineas = [];
-const LIMITE_POR_PETICION = 1000; // 🔥 Máximo permitido por Supabase
+const LIMITE_POR_PETICION = 4000; // 🔥 Máximo permitido por Supabase
 
 // 🚀 Estilo Mejorado para Google Maps
 const estiloMapa = [
