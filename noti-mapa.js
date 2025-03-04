@@ -163,39 +163,7 @@ async function cargarNoticias() {
             return;
         }
 
-        /* 🔥 Crear Marcadores para cada Noticia
-        data.forEach(noticia => {
-            const marcador = new google.maps.Marker({
-                position: { lat: parseFloat(noticia.latitud), lng: parseFloat(noticia.longitud) },
-                map: mapa,
-                title: noticia.titulo,
-                icon: {
-                    url: "https://maps.google.com/mapfiles/ms/icons/yellow-dot.png",
-                    scaledSize: new google.maps.Size(40, 40)
-                }
-            });
-
-            // 🔥 Crear InfoWindow para Detalles
-            const contenido = `
-                <div class="info-window">
-                    <h3>${noticia.titulo}</h3>
-                    <img src="${noticia.imagen_url}" alt="${noticia.titulo}">
-                    <p>${noticia.descripcion}</p>
-                </div>
-            `;
-
-            const infoWindow = new google.maps.InfoWindow({
-                content: contenido
-            });
-
-            marcador.addListener('click', () => {
-                infoWindow.open(mapa, marcador);
-            });
-
-            marcadores.push(marcador);
-        });*/
-
-        const {AdvancedMarkerElement, PinElement} = await google.maps.importLibrary("marker");
+        const {AdvancedMarkerElement} = await google.maps.importLibrary("marker");
 
         // Suponiendo que 'noticias' es la lista de noticias obtenida de Supabase
         data.forEach(noticia => {
@@ -355,7 +323,7 @@ function cerrarBarraNoticias() {
 const tooltip = document.getElementById("noticiaTooltip");
 
 // Función para mostrar la tarjeta con información
-function mostrarTooltip(event, noticia) {
+function mostrarTooltip(event, noticia, esClick = false) {
     tooltip.innerHTML = `
         <strong>${noticia.titulo}</strong>
         <p>${noticia.descripcion}</p>
@@ -366,6 +334,18 @@ function mostrarTooltip(event, noticia) {
     tooltip.style.top = `${event.clientY + 15}px`;
     tooltip.style.left = `${event.clientX + 15}px`;
     tooltip.style.display = "block";
+
+    // Si es clic, mantener la tarjeta abierta y cerrar al hacer clic fuera
+    if (esClick) {
+        document.addEventListener("click", cerrarTooltipFuera, { once: true });
+    }
+}
+
+// Función para cerrar la tarjeta si se hace clic fuera de un marcador
+function cerrarTooltipFuera(event) {
+    if (!tooltip.contains(event.target)) {
+        ocultarTooltip();
+    }
 }
 
 // Función para ocultar la tarjeta
