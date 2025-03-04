@@ -143,6 +143,7 @@ function iniciarMapa() {
         center: { lat: 26.9339, lng: -105.6664 },
         zoom: 13,
         mapTypeId: 'roadmap',
+        mapId: 'DEMO_MAP_ID',
         styles: estiloMapa,
         disableDefaultUI: true
     });
@@ -163,14 +164,14 @@ async function cargarNoticias() {
             return;
         }
 
-        // 🔥 Crear Marcadores para cada Noticia
+        /* 🔥 Crear Marcadores para cada Noticia
         data.forEach(noticia => {
             const marcador = new google.maps.Marker({
                 position: { lat: parseFloat(noticia.latitud), lng: parseFloat(noticia.longitud) },
                 map: mapa,
                 title: noticia.titulo,
                 icon: {
-                    url: "https://maps.google.com/mapfiles/ms/icons/red-dot.png",
+                    url: "https://maps.google.com/mapfiles/ms/icons/yellow-dot.png",
                     scaledSize: new google.maps.Size(40, 40)
                 }
             });
@@ -193,7 +194,30 @@ async function cargarNoticias() {
             });
 
             marcadores.push(marcador);
+        });*/
+
+        const {AdvancedMarkerElement, PinElement} = await google.maps.importLibrary("marker");
+
+        // Suponiendo que 'noticias' es la lista de noticias obtenida de Supabase
+        data.forEach(noticia => {
+            const marker = new AdvancedMarkerElement({
+                position: { lat: noticia.latitud, lng: noticia.longitud },
+                map: mapa,
+            });
+
+            // Acceder al contenedor del marcador para agregar eventos
+            const markerElement = marker.element;
+
+            if (markerElement) {
+                markerElement.addEventListener("mouseenter", (event) => {
+                    mostrarTooltip(event, noticia);
+                });
+
+                markerElement.addEventListener("mouseleave", ocultarTooltip);
+            }
         });
+
+
     } catch (err) {
         console.error("❌ Error al conectar con Supabase:", err);
     }
@@ -322,5 +346,27 @@ window.addEventListener('click', (event) => {
 function cerrarBarraNoticias() {
     const barraNoticias = document.getElementById('barra-noticias');
     barraNoticias.classList.remove('activo');
+}
+
+// Obtener el elemento de la tarjeta flotante
+const tooltip = document.getElementById("noticiaTooltip");
+
+// Función para mostrar la tarjeta con información
+function mostrarTooltip(event, noticia) {
+    tooltip.innerHTML = `
+        <strong>${noticia.titulo}</strong>
+        <p>${noticia.descripcion}</p>
+        ${noticia.imagen_url ? `<img src="${noticia.imagen_url}" alt="Imagen de la noticia">` : ""}
+    `;
+
+    // Posicionar la tarjeta cerca del cursor
+    tooltip.style.top = `${event.clientY + 15}px`;
+    tooltip.style.left = `${event.clientX + 15}px`;
+    tooltip.style.display = "block";
+}
+
+// Función para ocultar la tarjeta
+function ocultarTooltip() {
+    tooltip.style.display = "none";
 }
 
