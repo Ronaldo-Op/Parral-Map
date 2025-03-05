@@ -156,6 +156,10 @@ function iniciarMapa() {
 
 // 🚀 Función para cargar todas las calles usando paginación
 async function cargarTodasLasCalles() {
+
+    // Mostrar la animación de carga
+    document.getElementById("loading").style.display = "flex";
+    
     let calles = [];
     let desde = 0;
     let totalCalles = 0;
@@ -225,6 +229,11 @@ async function cargarTodasLasCalles() {
         });
     } catch (err) {
         console.error("❌ Error al conectar con Supabase:", err);
+    }finally {
+        // Extender la animación de carga 1 segundo más
+        setTimeout(() => {
+            document.getElementById("loading").style.display = "none";
+        }, 150); // 1000ms = 1 segundo
     }
 }
 

@@ -13,8 +13,16 @@ function iniciarMapa() {
         disableDefaultUI: true
     });
 
-    // 🔥 Cargar todas las noticias desde Supabase
-    cargarNoticias();
+    // Esperar a que el mapa esté completamente inicializado
+    google.maps.event.addListenerOnce(mapa, 'tilesloaded', async function () {
+        console.log("✅ Mapa cargado");
+
+        // Cargar las noticias en el mapa
+        await cargarNoticias(mapa);
+
+        // Ocultar la animación de carga
+        document.getElementById("loading").style.display = "none";
+    });
     agregarEventosLongPress();
 }
 
@@ -383,6 +391,9 @@ async function guardarNoticia() {
 // Hacer que las funciones sean accesibles globalmente
 window.cerrarModalNuevaNoticia = cerrarModalNuevaNoticia;
 window.guardarNoticia = guardarNoticia;
+
+// Llamar la función al cargar la página
+document.addEventListener("DOMContentLoaded", cargarNoticias);
 
 // Esperar a que la página cargue antes de inicializar el mapa
 document.addEventListener("DOMContentLoaded", iniciarMapa);

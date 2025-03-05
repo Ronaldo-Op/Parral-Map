@@ -539,3 +539,34 @@ body {
 .btn-interaccion:hover {
     color: #0056b3;
 }
+
+/* Contenedor de la animación de carga */
+.loading-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    z-index: 1000;
+}
+
+/* Spinner animado */
+.spinner {
+    width: 50px;
+    height: 50px;
+    border: 5px solid #3498db;
+    border-top: 5px solid transparent;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+

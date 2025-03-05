@@ -25,7 +25,7 @@ async function cargarDatosCuenta() {
     const { data: user, error: userError } = await supabase.auth.getUser();
 
     if (userError || !user || !user.user) {
-        alert("Error al obtener la información del usuario.");
+        console.error("Error al obtener la información del usuario.");
         return;
     }
 
