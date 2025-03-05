@@ -175,13 +175,13 @@ async function cargarNoticias() {
             // Acceder al contenedor del marcador para agregar eventos
             const markerElement = marker.element;
 
-            if (markerElement) {/*
+            if (markerElement) {
                 markerElement.addEventListener("mouseenter", (event) => {
                     mostrarTooltip(event, noticia);
                 });
 
                 markerElement.addEventListener("mouseleave", ocultarTooltip);
-*/
+
                 markerElement.addListener("click", (event) => {
                     mostrarTooltip(event, noticia, true);
                 });
@@ -325,30 +325,44 @@ const tooltip = document.getElementById("noticiaTooltip");
 // Función para mostrar la tarjeta con información
 function mostrarTooltip(event, noticia, esClick = false) {
     let e = event.domEvent || window.event; // Manejar eventos en móviles y desktop
+
     tooltip.innerHTML = `
         <strong>${noticia.titulo}</strong>
         <p>${noticia.descripcion}</p>
         ${noticia.imagen_url ? `<img src="${noticia.imagen_url}" alt="Imagen de la noticia">` : ""}
     `;
 
-    // Posicionar la tarjeta cerca del cursor
-    tooltip.style.top = `${event.clientY + 15}px`;
-    tooltip.style.left = `${event.clientX + 15}px`;
+    // Si es hover, usar la posición del cursor
+    let x = e?.clientX ?? window.innerWidth / 2;
+    let y = e?.clientY ?? window.innerHeight / 2;
+
+    // Si es un clic, centrar en la pantalla
+    if (esClick) {
+        x = window.innerWidth / 2 - tooltip.clientWidth / 2;
+        y = window.innerHeight / 2 - tooltip.clientHeight / 2;
+    }
+
+    // Posicionar el tooltip en la pantalla
+    tooltip.style.top = `${y}px`;
+    tooltip.style.left = `${x}px`;
     tooltip.style.display = "block";
 
+    // Si se abrió con clic, activar la detección de clic fuera
     if (esClick) {
-        setTimeout(() => { // Retrasar la detección del clic fuera
+        setTimeout(() => {
             document.addEventListener("click", cerrarTooltipFuera);
         }, 100);
     }
 }
 
 function cerrarTooltipFuera(event) {
-    if (!tooltip.contains(event.target) && !event.target.closest(".gm-style")) {
+    // Verificar si el clic ocurrió fuera del tooltip
+    if (!tooltip.contains(event.target)) {
         ocultarTooltip();
         document.removeEventListener("click", cerrarTooltipFuera);
     }
 }
+
 
 
 // Función para ocultar la tarjeta
