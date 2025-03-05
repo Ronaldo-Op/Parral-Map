@@ -170,7 +170,6 @@ async function cargarNoticias() {
             const marker = new AdvancedMarkerElement({
                 position: { lat: noticia.latitud, lng: noticia.longitud },
                 map: mapa,
-                gmpClickable: true,
             });
 
             // Acceder al contenedor del marcador para agregar eventos
@@ -325,7 +324,7 @@ const tooltip = document.getElementById("noticiaTooltip");
 
 // Función para mostrar la tarjeta con información
 function mostrarTooltip(event, noticia, esClick = false) {
-    let e = event.domEvent || window.event; // Maneja eventos en móviles y desktop
+    let e = event.domEvent || window.event; // Manejar eventos en móviles y desktop
     tooltip.innerHTML = `
         <strong>${noticia.titulo}</strong>
         <p>${noticia.descripcion}</p>
@@ -337,18 +336,20 @@ function mostrarTooltip(event, noticia, esClick = false) {
     tooltip.style.left = `${event.clientX + 15}px`;
     tooltip.style.display = "block";
 
-    // Si es clic, mantener la tarjeta abierta y cerrar al hacer clic fuera
     if (esClick) {
-        document.addEventListener("click", cerrarTooltipFuera, { once: true });
+        setTimeout(() => { // Retrasar la detección del clic fuera
+            document.addEventListener("click", cerrarTooltipFuera);
+        }, 100);
     }
 }
 
-// Función para cerrar la tarjeta si se hace clic fuera de un marcador
 function cerrarTooltipFuera(event) {
-    if (!tooltip.contains(event.target)) {
+    if (!tooltip.contains(event.target) && !event.target.closest(".gm-style")) {
         ocultarTooltip();
+        document.removeEventListener("click", cerrarTooltipFuera);
     }
 }
+
 
 // Función para ocultar la tarjeta
 function ocultarTooltip() {
