@@ -1,0 +1,294 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    margin-top: 40px;
+    display: flex;
+}
+
+.contenedor {
+    display: flex;
+    width: 100%;
+}
+
+/* 🚀 Estilo para la Barra de Desplazamiento (Scroll) */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+    background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.3);
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+::-webkit-scrollbar-track {
+    background-color: transparent;
+}
+
+/* Menú lateral */
+.menu-lateral {
+    width: 250px;
+    background: #2c3e50;
+    color: white;
+    padding: 20px;
+    position: fixed;
+    height: 100vh;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.menu-lateral h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.menu-lateral ul {
+    list-style: none;
+}
+
+.menu-lateral li {
+    padding: 15px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.menu-lateral li:hover {
+    background: #34495e;
+}
+
+/* Contenido principal */
+.contenido {
+    margin-left: 250px;
+    padding: 20px;
+    flex: 1;
+}
+
+.seccion {
+    display: block;
+}
+
+.oculto {
+    display: none;
+}
+
+.perfil-container {
+    max-width: 400px;
+    display: flex;
+    flex-direction: column;
+}
+
+.perfil-container label {
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.perfil-container input {
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.perfil-container button {
+    margin-top: 10px;
+    padding: 10px;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+}
+
+#editarCuenta {
+    background-color: #f39c12;
+    color: white;
+}
+
+#guardarCuenta {
+    background-color: #27ae60;
+    color: white;
+}
+
+.perfil-img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 10px;
+}
+
+
+/* Global Reset para Navbar */
+.navbar,
+.navbar * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    text-decoration: none;
+}
+
+
+/* Navbar */
+.navbar {
+    width: 100%;
+    background-color: #1e90ff;
+    color: white;
+    padding: 10px 30px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: nowrap;
+    z-index: 50;
+}
+
+.navbar h1 {
+    font-size: 24px;
+    flex-grow: 1;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-right: 20px;
+}
+
+.navbar a {
+    color: white;
+    text-decoration: none;
+    padding: 10px 15px;
+    font-size: 16px;
+}
+
+.navbar a.active {
+    background-color: #4CAF50;
+    border-radius: 5px;
+}
+
+.navbar button {
+    background: none;
+    border: 2px solid white;
+    color: white;
+    cursor: pointer;
+    font-size: 18px;
+    padding: 5px 15px;
+    border-radius: 5px;
+    transition: background 0.3s ease;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.navbar button:hover {
+    background-color: white;
+    color: #1e90ff;
+}
+
+/* Modales */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.3s ease;
+    z-index: 999;
+}
+
+.modal-content {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    width: 90%;
+    max-width: 400px;
+    animation: slideDown 0.4s ease;
+    position: relative;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.modal h2 {
+    color: #333;
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.modal input[type="email"],
+.modal input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.modal button {
+    background-color: #1e90ff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 18px;
+    transition: background 0.3s ease;
+}
+
+.modal button:hover {
+    background-color: #155a9c;
+}
+
+.modal p {
+    font-size: 14px;
+    color: #777;
+    margin: 10px 0;
+}
+
+.modal a {
+    color: #1e90ff;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+.modal a:hover {
+    color: #155a9c;
+}
+
+.close-btn {
+    cursor: pointer;
+    color: #999;
+    font-size: 24px;
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    transition: color 0.3s ease;
+}
+
+.close-btn:hover {
+    color: #555;
+}

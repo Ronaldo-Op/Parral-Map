@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configuración</title>
+    <link rel="stylesheet" href="configuracion.css">
+</head>
+<body>
+    <div class="contenedor">
+        <!-- Menú lateral -->
+        <nav class="menu-lateral">
+            <h2>Configuración</h2>
+            <ul>
+                <li onclick="mostrarSeccion('general')">⚙️ Configuración General</li>
+                <li onclick="mostrarSeccion('cuenta')">👤 Cuenta</li>
+                <li onclick="mostrarSeccion('usuarios')">👥 Usuarios</li>
+                <li onclick="mostrarSeccion('permisos')">🔑 Permisos</li>
+                <li onclick="mostrarSeccion('apariencia')">🎨 Apariencia</li>
+            </ul>
+        </nav>
+
+        <!-- Contenido principal -->
+        <main class="contenido">
+            <section id="general" class="seccion">
+                <h2>⚙️ Configuración General</h2>
+                <p>Aquí puedes ajustar las configuraciones generales del sistema.</p>
+            </section>
+
+            <section id="cuenta" class="seccion oculto">
+                <h2>👤 Mi Cuenta</h2>
+                <p>Aquí puedes ver y editar tu información de cuenta.</p>
+            
+                <div class="perfil-container">
+                    <!-- Foto de perfil -->
+                    <label>Foto de perfil:</label>
+                    <img id="fotoPerfil" src="fondo.jpg" alt="Foto de perfil" class="perfil-img">
+                    <input type="file" id="inputFoto" accept="image/*">
+            
+                    <label>Nombre de usuario:</label>
+                    <input type="text" id="username" disabled>
+            
+                    <label>Nombre:</label>
+                    <input type="text" id="nombre" disabled>
+            
+                    <label>Apellido:</label>
+                    <input type="text" id="apellido" disabled>
+            
+                    <label>Correo electrónico:</label>
+                    <input type="email" id="email" disabled>
+            
+                    <button id="editarCuenta" onclick="habilitarEdicion()">✏️ Editar</button>
+                    <button id="guardarCuenta" onclick="guardarCuenta()" style="display: none;">💾 Guardar</button>
+                </div>
+            </section>
+
+            <section id="usuarios" class="seccion oculto">
+                <h2>👥 Gestión de Usuarios</h2>
+                <p>Administra los usuarios registrados en el sistema.</p>
+            </section>
+
+            <section id="permisos" class="seccion oculto">
+                <h2>🔑 Permisos</h2>
+                <p>Gestiona los permisos de los usuarios.</p>
+            </section>
+
+            <section id="apariencia" class="seccion oculto">
+                <h2>🎨 Apariencia</h2>
+                <p>Personaliza la apariencia de la aplicación.</p>
+            </section>
+        </main>
+    </div>
+
+    <!-- 🚀 Scripts de la Página -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+    <script type="module" src="supabase-config.js"></script>
+    <script type="module" src="navbar.js"></script>
+    <script type="module" src="../auth-session.js"></script>
+    <script type="module" src="configuracion.js"></script>
+</body>
+</html>

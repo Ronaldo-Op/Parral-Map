@@ -2,140 +2,6 @@
 import { supabase } from '../supabase-config.js';
 
 let mapa;
-let marcadores = [];
-
-// 🚀 Estilo Mejorado para Google Maps
-const estiloMapa = [
-    {
-        "elementType": "geometry",
-        "stylers": [
-            { "color": "#fdfdfd" } // Fondo blanco suave
-        ]
-    },
-    {
-        "elementType": "labels.icon",
-        "stylers": [
-            { "visibility": "off" }
-        ]
-    },
-    {
-        "elementType": "labels.text.fill",
-        "stylers": [
-            { "color": "#616161" } // Texto en gris oscuro
-        ]
-    },
-    {
-        "elementType": "labels.text.stroke",
-        "stylers": [
-            { "color": "#fdfdfd" } // Fondo blanco suave para texto
-        ]
-    },
-    {
-        "featureType": "administrative.land_parcel",
-        "elementType": "labels.text.fill",
-        "stylers": [
-            { "color": "#bdbdbd" } // Parcelas en gris claro
-        ]
-    },
-    {
-        "featureType": "poi",
-        "elementType": "geometry",
-        "stylers": [
-            { "color": "#e0e0e0" } // Lugares de interés en gris suave
-        ]
-    },
-    {
-        "featureType": "poi",
-        "elementType": "labels.text.fill",
-        "stylers": [
-            { "color": "#757575" }
-        ]
-    },
-    {
-        "featureType": "poi.park",
-        "elementType": "geometry",
-        "stylers": [
-            { "color": "#d5e8a4" } // Zonas verdes en verde suave
-        ]
-    },
-    {
-        "featureType": "poi.park",
-        "elementType": "labels.text.fill",
-        "stylers": [
-            { "color": "#9e9e9e" }
-        ]
-    },
-    {
-        "featureType": "road",
-        "elementType": "geometry",
-        "stylers": [
-            { "color": "#c6c6c6" } // Calles en blanco puro
-        ]
-    },
-    {
-        "featureType": "road.arterial",
-        "elementType": "geometry",
-        "stylers": [
-            { "color": "#dadada" } // Calles arteriales en gris claro
-        ]
-    },
-    {
-        "featureType": "road.arterial",
-        "elementType": "labels.text.fill",
-        "stylers": [
-            { "color": "#c6c6c6" } // Texto en gris oscuro
-        ]
-    },
-    {
-        "featureType": "road.highway",
-        "elementType": "geometry",
-        "stylers": [
-            { "color": "#c6c6c6" } // Carreteras en gris oscuro
-        ]
-    },
-    {
-        "featureType": "road.highway",
-        "elementType": "labels.text.fill",
-        "stylers": [
-            { "color": "#616161" }
-        ]
-    },
-    {
-        "featureType": "road.local",
-        "elementType": "labels.text.fill",
-        "stylers": [
-            { "color": "#9e9e9e" }
-        ]
-    },
-    {
-        "featureType": "transit.line",
-        "elementType": "geometry",
-        "stylers": [
-            { "color": "#e0e0e0" }
-        ]
-    },
-    {
-        "featureType": "transit.station",
-        "elementType": "geometry",
-        "stylers": [
-            { "color": "#eeeeee" }
-        ]
-    },
-    {
-        "featureType": "water",
-        "elementType": "geometry",
-        "stylers": [
-            { "color": "#a2d5f2" } // Áreas acuáticas en azul claro
-        ]
-    },
-    {
-        "featureType": "water",
-        "elementType": "labels.text.fill",
-        "stylers": [
-            { "color": "#929292" }
-        ]
-    }
-];
 
 // 🚀 Iniciar el Mapa de Google Maps
 function iniciarMapa() {
@@ -149,6 +15,7 @@ function iniciarMapa() {
 
     // 🔥 Cargar todas las noticias desde Supabase
     cargarNoticias();
+    agregarEventosLongPress();
 }
 
 // 🚀 Cargar Noticias desde Supabase
@@ -175,13 +42,13 @@ async function cargarNoticias() {
             // Acceder al contenedor del marcador para agregar eventos
             const markerElement = marker.element;
 
-            if (markerElement) {/*
+            if (markerElement) {
                 markerElement.addEventListener("mouseenter", (event) => {
                     mostrarTooltip(event, noticia);
                 });
 
                 markerElement.addEventListener("mouseleave", ocultarTooltip);
-*/
+
                 markerElement.addListener("click", (event) => {
                     mostrarTooltip(event, noticia, true);
                 });
@@ -328,8 +195,9 @@ function mostrarTooltip(event, noticia, esClick = false) {
 
     tooltip.innerHTML = `
         <strong>${noticia.titulo}</strong>
-        <p>${noticia.descripcion}</p>
         ${noticia.imagen_url ? `<img src="${noticia.imagen_url}" alt="Imagen de la noticia">` : ""}
+        <p>${noticia.descripcion}</p>
+        <p>${noticia.username}${noticia.fecha}</p>
     `;
 
     // Obtener el tamaño del tooltip
@@ -372,3 +240,149 @@ function cerrarTooltipFuera(event) {
 function ocultarTooltip() {
     tooltip.style.display = "none";
 }
+
+let lastClickedLocation = null;
+
+// Función que agrega los eventos de "mantener presionado"
+function agregarEventosLongPress() {
+    if (!mapa) {
+        console.error("Mapa no está definido.");
+        return;
+    }
+
+    let longPressTimer;
+
+    function iniciarLongPress(event) {
+        lastClickedLocation = event.latLng;
+        longPressTimer = setTimeout(() => {
+            abrirModalNuevaNoticia();
+        }, 3000);
+    }
+
+    function cancelarLongPress() {
+        clearTimeout(longPressTimer);
+    }
+
+    // Agregar eventos después de que el mapa esté cargado
+    mapa.addListener("mousedown", iniciarLongPress);
+    mapa.addListener("mouseup", cancelarLongPress);
+    mapa.addListener("mousemove", cancelarLongPress);
+
+    mapa.addListener("click", function(event) {
+        if (event.placeId) {
+            event.stop();
+        }
+    });    
+
+    mapa.addListener("touchstart", iniciarLongPress);
+    mapa.addListener("touchend", cancelarLongPress);
+}
+
+async function abrirModalNuevaNoticia() {
+    // Obtener el usuario autenticado
+    const { data: user, error: userError } = await supabase.auth.getUser();
+
+    if (userError || !user || !user.user) {
+        console.log("Debes iniciar sesión para publicar una noticia.");
+        return;
+    }
+
+    const user_id = user.user.id; // ID del usuario autenticado
+
+    // Obtener el role del usuario desde la base de datos
+    const { data: userData, error: roleError } = await supabase
+        .from("usuarios")
+        .select("role")
+        .eq("id", user_id)
+        .single();
+
+    if (roleError || !userData) {
+        console.log("No se pudo verificar tu rol de usuario.");
+        return;
+    }
+
+    if (userData.role !== "admin") {
+        console.log("No tienes permisos para crear noticias.");
+        return;
+    }
+
+    // Si es admin, abrir el modal
+    document.getElementById("modalNuevaNoticia").style.display = "flex";
+}
+
+
+function cerrarModalNuevaNoticia() {
+    document.getElementById("modalNuevaNoticia").style.display = "none";
+}
+
+async function guardarNoticia() {
+    const titulo = document.getElementById("titulo").value;
+    const descripcion = document.getElementById("descripcion").value;
+    const imagen_url = document.getElementById("imagen").value || null;
+
+    if (!titulo || !descripcion) {
+        alert("Por favor, completa todos los campos.");
+        return;
+    }
+
+    if (!lastClickedLocation) {
+        alert("No se encontró una ubicación válida.");
+        return;
+    }
+
+    // Obtener el usuario autenticado
+    const { data: user, error: userError } = await supabase.auth.getUser();
+
+    if (userError || !user || !user.user) {
+        alert("Debes iniciar sesión para publicar una noticia.");
+        return;
+    }
+
+    const user_id = user.user.id; // ID del usuario autenticado
+
+    // Obtener el username desde la base de datos
+    const { data: userData, error: usernameError } = await supabase
+        .from("usuarios")
+        .select("username")
+        .eq("id", user_id)
+        .single();
+
+    if (usernameError || !userData) {
+        alert("No se pudo obtener el username del usuario.");
+        return;
+    }
+
+    const username = userData.username; // Nombre de usuario obtenido de la base de datos
+
+    // Insertar la noticia con el username
+    const { data, error } = await supabase
+        .from("noticias_ubicacion")
+        .insert([
+            {
+                user_id,
+                username, // Se guarda el username del usuario autenticado
+                titulo,
+                descripcion,
+                imagen_url,
+                latitud: lastClickedLocation.lat(),
+                longitud: lastClickedLocation.lng(),
+                fecha: new Date().toISOString()
+            }
+        ]);
+
+    if (error) {
+        console.error("Error al guardar la noticia:", error);
+        alert("Hubo un error al guardar la noticia.");
+    } else {
+        alert("¡Noticia guardada exitosamente!");
+        cerrarModalNuevaNoticia();
+        obtenerPublicaciones(); // Recargar las noticias
+    }
+}
+
+// Hacer que las funciones sean accesibles globalmente
+window.cerrarModalNuevaNoticia = cerrarModalNuevaNoticia;
+window.guardarNoticia = guardarNoticia;
+
+// Esperar a que la página cargue antes de inicializar el mapa
+document.addEventListener("DOMContentLoaded", iniciarMapa);

@@ -23,6 +23,24 @@
     
     <button id="boton-noticias" title="Noticias">📰</button>
 
+    <!-- Modal para crear nueva noticia -->
+<div id="modalNuevaNoticia" class="modal">
+    <div class="modal-content">
+        <span class="close-btn" onclick="cerrarModalNuevaNoticia()">&times;</span>
+        <h2>Crear Nueva Noticia</h2>
+        <label for="titulo">Título:</label>
+        <input type="text" id="titulo" placeholder="Título de la noticia">
+
+        <label for="descripcion">Descripción:</label>
+        <textarea id="descripcion" placeholder="Escribe los detalles de la noticia"></textarea>
+
+        <label for="imagen">URL de Imagen:</label>
+        <input type="text" id="imagen" placeholder="Opcional: URL de imagen">
+
+        <button onclick="guardarNoticia()">Guardar Noticia</button>
+    </div>
+</div>
+
     <!-- 🚀 Contenedor del Mapa -->
     <div id="noti-mapa"></div>
 
