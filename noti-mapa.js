@@ -342,8 +342,8 @@ function mostrarTooltip(event, noticia, esClick = false) {
 
     // Si es clic, centrar en la pantalla correctamente
     if (esClick) {
-        x = Math.max((window.innerWidth - tooltipWidth) / 2, 10); // Evitar que se salga por la derecha
-        y = Math.max((window.innerHeight - tooltipHeight) / 2, 10); // Evitar que se salga por abajo
+        x = Math.max((window.innerWidth - tooltipWidth) / 3, 10); // Evitar que se salga por la derecha
+        y = Math.max((window.innerHeight - tooltipHeight) / 3, 10); // Evitar que se salga por abajo
     }
 
     // Posicionar el tooltip en la pantalla
