@@ -332,14 +332,18 @@ function mostrarTooltip(event, noticia, esClick = false) {
         ${noticia.imagen_url ? `<img src="${noticia.imagen_url}" alt="Imagen de la noticia">` : ""}
     `;
 
+    // Obtener el tamaño del tooltip
+    let tooltipWidth = tooltip.clientWidth;
+    let tooltipHeight = tooltip.clientHeight;
+
     // Si es hover, usar la posición del cursor
     let x = e?.clientX ?? window.innerWidth / 2;
     let y = e?.clientY ?? window.innerHeight / 2;
 
-    // Si es un clic, centrar en la pantalla
+    // Si es clic, centrar en la pantalla correctamente
     if (esClick) {
-        x = window.innerWidth / 2 - tooltip.clientWidth / 2;
-        y = window.innerHeight / 2 - tooltip.clientHeight / 2;
+        x = Math.max((window.innerWidth - tooltipWidth) / 2, 10); // Evitar que se salga por la derecha
+        y = Math.max((window.innerHeight - tooltipHeight) / 2, 10); // Evitar que se salga por abajo
     }
 
     // Posicionar el tooltip en la pantalla
@@ -354,6 +358,7 @@ function mostrarTooltip(event, noticia, esClick = false) {
         }, 1);
     }
 }
+
 
 function cerrarTooltipFuera(event) {
     // Verificar si el clic ocurrió fuera del tooltip
