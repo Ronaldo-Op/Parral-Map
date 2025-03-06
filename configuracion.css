@@ -153,6 +153,12 @@ body {
     z-index: 50;
 }
 
+/* Contenedor del logo */
+.logo img {
+    height: 31px;  /* Ajusta el tamaño del logo */
+    width: auto;
+}
+
 .navbar h1 {
     font-size: 24px;
     flex-grow: 1;
@@ -191,6 +197,28 @@ body {
 .navbar button:hover {
     background-color: white;
     color: #1e90ff;
+}
+
+/* Contenedor del perfil en la navbar */
+.perfil-navbar {
+    display: flex;
+    align-items: center;
+    margin-left: 20px;
+}
+
+/* Imagen de perfil */
+.perfil-navbar img {
+    width: 40px;  /* Ajusta el tamaño */
+    height: 40px;
+    border-radius: 50%;  /* Hace la imagen circular */
+    object-fit: cover;
+    cursor: pointer;  /* Indica que se puede interactuar */
+    border: 2px solid #fff;  /* Borde opcional */
+    transition: transform 0.2s;
+}
+
+.perfil-navbar img:hover {
+    transform: scale(1.1);  /* Efecto al pasar el mouse */
 }
 
 /* Modales */
