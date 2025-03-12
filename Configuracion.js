@@ -1,5 +1,5 @@
 import { supabase } from "./supabase-config.js";
-
+/*
 function mostrarSeccion(id) {
     // Ocultar todas las secciones
     document.querySelectorAll(".seccion").forEach(seccion => {
@@ -9,7 +9,7 @@ function mostrarSeccion(id) {
     // Mostrar la sección seleccionada
     document.getElementById(id).classList.remove("oculto");
 }
-
+*/
 function habilitarEdicion() {
     document.getElementById("username").disabled = false;
     document.getElementById("nombre").disabled = false;
@@ -126,9 +126,138 @@ async function guardarCuenta() {
     cargarDatosCuenta();
 }
 
+async function cargarPublicacionesModeracion() {
+    const contenedor = document.getElementById("contenedor-moderacion");
+    contenedor.innerHTML = "<p>Cargando publicaciones...</p>";
 
+    try {
+        const { data: publicaciones, error } = await supabase
+            .from("noticias_ubicacion")
+            .select("id, titulo, descripcion, username, fecha, imagen_url, estado")
+
+        if (error) throw error;
+
+        if (!publicaciones || publicaciones.length === 0) {
+            contenedor.innerHTML = "<p>No hay publicaciones para mostrar.</p>";
+            return;
+        }
+
+        // Limpiar contenedor y generar tarjetas
+        contenedor.innerHTML = "";
+
+        publicaciones.forEach(pub => {
+            const tarjeta = document.createElement("div");
+            tarjeta.classList.add("tarjeta-publicacion");
+
+            tarjeta.innerHTML = `
+                <h3>${pub.titulo}</h3>
+                <img src="${pub.imagen_url || 'placeholder.jpg'}" alt="Imagen de la publicación" class="imagen-publicacion">
+                <p><strong>Usuario:</strong> ${pub.username}</p>
+                <p>${pub.descripcion}</p>
+                <p><small>📅 ${new Date(pub.fecha).toLocaleString()}</small></p>
+                <p><strong>Estado:</strong> ${pub.estado}</p>
+                <div class="acciones-moderacion">
+                    ${
+                        pub.estado === "pendiente"
+                            ? `
+                                <button onclick="aprobarPublicacion('${pub.id}')">✅ Aprobar</button>
+                                <button onclick="rechazarPublicacion('${pub.id}')">❌ Rechazar</button>
+                            `
+                            : pub.estado === "aprobada"
+                            ? `
+                                <p style="color: green">✔ Aprobada</p>
+                                <button onclick="eliminarPublicacion('${pub.id}')">🗑️ Eliminar</button>
+                            `
+                            : `<p style="color: gray">Estado: ${pub.estado}</p>`
+                    }
+                </div>
+            `;
+
+            tarjeta.classList.add("tarjeta-publicacion", pub.estado); // pub.estado debe ser "aprobada", "rechazada", etc.
+
+
+            contenedor.appendChild(tarjeta);
+        });
+
+    } catch (err) {
+        contenedor.innerHTML = `<p>Error al cargar publicaciones: ${err.message}</p>`;
+    }
+}
+
+function mostrarSeccion(id) {
+    // Ocultar todas las secciones
+    document.querySelectorAll(".seccion").forEach(seccion => {
+        seccion.classList.add("oculto");
+    });
+
+    // Mostrar la sección seleccionada
+    document.getElementById(id).classList.remove("oculto");
+
+    // Si es moderación, cargar publicaciones
+    if (id === "moderacion") {
+        cargarPublicacionesModeracion();
+    }
+}
+
+async function aprobarPublicacion(id) {
+    const { error } = await supabase
+        .from("noticias_ubicacion")
+        .update({ estado: "aprobada" })
+        .eq("id", id);
+
+    if (error) {
+        alert("❌ Error al aprobar publicación.");
+        console.error(error);
+        return;
+    }
+
+    alert("✅ Publicación aprobada.");
+    cargarPublicacionesModeracion();
+}
+
+async function rechazarPublicacion(id) {
+    const confirmar = confirm("¿Seguro que deseas eliminar esta publicación?");
+    if (!confirmar) return;
+
+    const { error } = await supabase
+        .from("noticias_ubicacion")
+        .delete()
+        .eq("id", id);
+
+    if (error) {
+        alert("❌ Error al eliminar la publicación.");
+        console.error(error);
+        return;
+    }
+
+    alert("🗑️ Publicación rechazada y eliminada.");
+    cargarPublicacionesModeracion();
+}
+
+async function eliminarPublicacion(id) {
+    const confirmar = confirm("¿Seguro que deseas eliminar esta publicación aprobada?");
+    if (!confirmar) return;
+
+    const { error } = await supabase
+        .from("noticias_ubicacion")
+        .delete()
+        .eq("id", id);
+
+    if (error) {
+        alert("❌ Error al eliminar la publicación.");
+        console.error(error);
+        return;
+    }
+
+    alert("🗑️ Publicación eliminada correctamente.");
+    cargarPublicacionesModeracion();
+}
 
 window.mostrarSeccion = mostrarSeccion;
 document.addEventListener("DOMContentLoaded", cargarDatosCuenta);
 window.habilitarEdicion = habilitarEdicion;
 window.guardarCuenta = guardarCuenta;
+window.cargarPublicacionesModeracion = cargarPublicacionesModeracion;
+window.aprobarPublicacion = aprobarPublicacion;
+window.rechazarPublicacion = rechazarPublicacion;
+window.eliminarPublicacion = eliminarPublicacion;

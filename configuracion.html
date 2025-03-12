@@ -17,6 +17,7 @@
                 <li onclick="mostrarSeccion('usuarios')">👥 Usuarios</li>
                 <li onclick="mostrarSeccion('permisos')">🔑 Permisos</li>
                 <li onclick="mostrarSeccion('apariencia')">🎨 Apariencia</li>
+                <li onclick="mostrarSeccion('moderacion')">🛠️ Moderación</li>
             </ul>
         </nav>
 
@@ -67,6 +68,15 @@
             <section id="apariencia" class="seccion oculto">
                 <h2>🎨 Apariencia</h2>
                 <p>Personaliza la apariencia de la aplicación.</p>
+            </section>
+            <section id="moderacion" class="seccion oculto">
+                <h2>🛠️ Moderación de Publicaciones</h2>
+                <p>Revisa y gestiona las publicaciones reportadas o pendientes.</p>
+            
+                <div id="contenedor-moderacion">
+                    <p>Cargando publicaciones...</p>
+                    <!-- Aquí se insertarán dinámicamente las publicaciones -->
+                </div>
             </section>
         </main>
     </div>

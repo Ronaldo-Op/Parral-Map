@@ -104,6 +104,7 @@ function configurarModales() {
     window.addEventListener("click", (event) => {
         if (event.target === loginModal) loginModal.style.display = "none";
         if (event.target === registerModal) registerModal.style.display = "none";
+        if (event.target === recoverModal) recoverModal.style.display = "none";
     });
 }
 
@@ -199,7 +200,7 @@ async function iniciarSesion() {
             document.getElementById("status-message").innerText = "✅ Inicio de sesión exitoso. Redirigiendo...";
             
             setTimeout(() => {
-                window.location.href = "mapa.html";
+                window.location.href = "index.html";
             }, 2000);
         }
     } catch (err) {
@@ -224,7 +225,7 @@ async function cerrarSesion() {
     }
 }
 
-// 🔥 Función para recuperar pass
+// 🔥 Función para recuperar contraseña
 document.addEventListener("click", (event) => {
     if (event.target.id === "recover-btn") {
         recuperarContrasena();
@@ -233,7 +234,7 @@ document.addEventListener("click", (event) => {
 
 // 🔥 Función para recuperar contraseña
 async function recuperarContrasena() {
-    const email = document.getElementById("recover-email").value;
+    const email = document.getElementById("recover-email").value.trim();
 
     // 🔍 Validaciones
     if (!validarCorreo(email)) {
@@ -242,27 +243,54 @@ async function recuperarContrasena() {
     }
 
     try {
-        // 🔥 Solicitud de recuperación de contraseña en Supabase
-        let { error } = await supabase.auth.resetPasswordForEmail(email, {
+        // 🔎 Verificar si el correo existe en la tabla de usuarios
+        const { data: usuario, error: queryError } = await supabase
+            .from("usuarios")
+            .select("id")
+            .eq("email", email)
+            .maybeSingle();
+
+        if (queryError) {
+            throw new Error("No se pudo verificar el correo. Intenta más tarde.");
+        }
+
+        if (!usuario) {
+            document.getElementById("recover-message").innerText = "❌ Este correo no está registrado.";
+            return;
+        }
+
+        // ✅ Enviar correo de recuperación si el usuario existe
+        const { error } = await supabase.auth.resetPasswordForEmail(email, {
             redirectTo: `https://parral-map.vercel.app/reset-password.html`
         });
+
         if (error) {
-            if (error.message.includes("Invalid login credentials")) {
-                document.getElementById("recover-message").innerText = "❌ Correo no valido.";
-            } else {
-                throw new Error(error.message);
-            }
-        } else {
-            document.getElementById("recover-message").innerText = "✅ Revisa tu correo para recuperar tu contraseña.";
-            
-            setTimeout(() => {
-                document.getElementById("recover-modal").style.display = "none";
-            }, 2000);
+            throw new Error("No se pudo enviar el enlace de recuperación.");
         }
+
+        document.getElementById("recover-message").innerText =
+            "✅ Revisa tu correo para recuperar tu contraseña.";
+
+        setTimeout(() => {
+            document.getElementById("recover-modal").style.display = "none";
+        }, 2000);
+
     } catch (err) {
         document.getElementById("recover-message").innerText = "❌ Error: " + err.message;
     }
 }
+
+botonConfiguracion.addEventListener("click", async (e) => {
+    const loginModal = document.getElementById("login-modal");
+    const { data } = await supabase.auth.getSession();
+    if (!data.session) {
+        e.preventDefault();
+        loginModal.style.display = "flex";
+    }else {
+        window.location.href = "configuracion.html"
+    }
+});
+
 /*
 // 🔥 Tamaño del lote y retardo entre lotes
 const TAMANO_LOTE = 50;

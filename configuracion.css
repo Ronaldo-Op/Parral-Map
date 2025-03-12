@@ -320,3 +320,55 @@ body {
 .close-btn:hover {
     color: #555;
 }
+
+.tarjeta-publicacion {
+    position: relative;
+    border: 1px solid #ccc;
+    border-left: 6px solid #3498db;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 16px;
+    background-color: #fff;
+}
+
+.tarjeta-publicacion.aprobada {
+    border-left-color: #2ecc71;
+    background-color: #f0fff4;
+}
+
+.tarjeta-publicacion.pendiente {
+    border-left-color: #ffaf04;
+    background-color: #fff0f0;
+}
+
+.tarjeta-publicacion h3 {
+    margin: 0 0 8px;
+}
+
+.tarjeta-publicacion button {
+    margin-right: 10px;
+    padding: 6px 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.tarjeta-publicacion button:first-of-type {
+    background-color: #27ae60;
+    color: white;
+}
+
+.tarjeta-publicacion button:last-of-type {
+    background-color: #c0392b;
+    color: white;
+}
+
+.imagen-publicacion {
+    width: 200px;
+    max-height: 200px;
+    object-fit: cover;
+    border-radius: 6px;
+    margin: 10px 0;
+}
+
+tarjeta.classList.add("tarjeta-publicacion", pub.estado);
