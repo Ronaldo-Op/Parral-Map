@@ -2,9 +2,11 @@ import { supabase } from "./supabase-config.js";
 
         // 🔥 Función para obtener el token de autenticación de la URL
         function obtenerToken() {
-            const params = new URLSearchParams(window.location.search);
-            return params.get('access_token');
+            const hash = window.location.hash.substring(1); // elimina el "#"
+            const params = new URLSearchParams(hash);
+            return params.get("access_token");
         }
+        
 
         // 🔥 Función para autenticar con el token de acceso
         async function autenticarConToken() {
