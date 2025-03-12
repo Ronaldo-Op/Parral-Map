@@ -71,23 +71,33 @@ function configurarBotonAuth() {
 // 🔥 Configurar los modales de inicio de sesión y registro
 function configurarModales() {
     const loginModal = document.getElementById("login-modal");
+    const recoverModal = document.getElementById("recover-modal");
     const registerModal = document.getElementById("register-modal");
     const closeButtons = document.querySelectorAll(".close-btn");
 
     document.getElementById("open-register")?.addEventListener("click", () => {
         loginModal.style.display = "none";
         registerModal.style.display = "flex";
+        recoverModal.style.display = "none";
     });
 
     document.getElementById("open-login")?.addEventListener("click", () => {
         registerModal.style.display = "none";
         loginModal.style.display = "flex";
+        recoverModal.style.display = "none";
+    });
+
+    document.getElementById("open-recover")?.addEventListener("click", () => {
+        registerModal.style.display = "none";
+        loginModal.style.display = "none";
+        recoverModal.style.display = "flex";
     });
 
     closeButtons.forEach((btn) => {
         btn.addEventListener("click", () => {
             loginModal.style.display = "none";
             registerModal.style.display = "none";
+            recoverModal.style.display = "none";
         });
     });
 
@@ -214,29 +224,43 @@ async function cerrarSesion() {
     }
 }
 
+// 🔥 Función para recuperar pass
+document.addEventListener("click", (event) => {
+    if (event.target.id === "recover-btn") {
+        recuperarContrasena();
+    }
+});
+
 // 🔥 Función para recuperar contraseña
 async function recuperarContrasena() {
-    const email = prompt("Ingresa tu correo para recuperar la contraseña:");
+    const email = document.getElementById("recover-email").value;
 
+    // 🔍 Validaciones
     if (!validarCorreo(email)) {
-        alert("❌ Correo no válido.");
+        document.getElementById("recover-message").innerText = "❌ Correo no válido.";
         return;
     }
 
     try {
         // 🔥 Solicitud de recuperación de contraseña en Supabase
         let { error } = await supabase.auth.resetPasswordForEmail(email, {
-            redirectTo: `${window.location.origin}/reset-password.html`
+            redirectTo: `https://parral-map.vercel.app/reset-password.html`
         });
-
         if (error) {
-            throw new Error(error.message);
+            if (error.message.includes("Invalid login credentials")) {
+                document.getElementById("recover-message").innerText = "❌ Correo no valido.";
+            } else {
+                throw new Error(error.message);
+            }
         } else {
-            alert("✅ Correo de recuperación enviado. Revisa tu bandeja de entrada.");
+            document.getElementById("recover-message").innerText = "✅ Revisa tu correo para recuperar tu contraseña.";
+            
+            setTimeout(() => {
+                document.getElementById("recover-modal").style.display = "none";
+            }, 2000);
         }
     } catch (err) {
-        console.error("❌ Error al enviar el correo de recuperación:", err.message);
-        alert("❌ Error al enviar el correo de recuperación: " + err.message);
+        document.getElementById("recover-message").innerText = "❌ Error: " + err.message;
     }
 }
 /*

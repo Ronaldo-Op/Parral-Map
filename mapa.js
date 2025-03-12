@@ -146,8 +146,8 @@ function iniciarMapa() {
         center: { lat: 26.9339, lng: -105.6664 },
         zoom: 14,
         mapTypeId: 'roadmap',
-        disableDefaultUI: true, // 🔥 Muestra los controles de zoom y otros
-        styles: estiloMapa
+        mapId: '2be7a20d7d4279a',
+        disableDefaultUI: true
     });
 
     // 🔥 Cargar todas las calles desde Supabase

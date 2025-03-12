@@ -18,7 +18,7 @@
         <input type="email" id="login-email" placeholder="Correo electrónico" required>
         <input type="password" id="login-password" placeholder="Contraseña" required>
         <button id="login-btn">Ingresar</button>
-        <p><a href="#" id="forgot-password">¿Olvidaste tu contraseña?</a></p>
+        <p><a href="#" id="open-recover">¿Olvidaste tu contraseña?</a></p>
         <p>¿No tienes cuenta? <a href="#" id="open-register">Regístrate aquí</a></p>
         <p id="status-message"></p>
     </div>
@@ -33,5 +33,16 @@
         <button id="register-btn">Registrarse</button>
         <p>¿Ya tienes cuenta? <a href="#" id="open-login">Inicia sesión aquí</a></p>
         <p id="register-status-message"></p>
+    </div>
+</div>
+
+<div id="recover-modal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn">&times;</span>
+        <h2>Recuperar Contraseña</h2>
+        <p>Introduce tu correo para recibir un enlace de recuperación.</p>
+        <input type="email" id="recover-email" placeholder="Correo electrónico" required>
+        <button id="recover-btn">Enviar enlace</button>
+        <p id="recover-message"></p>
     </div>
 </div>
