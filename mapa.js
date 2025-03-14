@@ -5,141 +5,6 @@ let mapa;
 let polilineas = [];
 const LIMITE_POR_PETICION = 4000; // 🔥 Máximo permitido por Supabase
 
-// 🚀 Estilo Mejorado para Google Maps
-const estiloMapa = [
-    {
-        "elementType": "geometry",
-        "stylers": [
-            { "color": "#fdfdfd" } // Fondo blanco suave
-        ]
-    },
-    {
-        "elementType": "labels.icon",
-        "stylers": [
-            { "visibility": "off" }
-        ]
-    },
-    {
-        "elementType": "labels.text.fill",
-        "stylers": [
-            { "color": "#616161" } // Texto en gris oscuro
-        ]
-    },
-    {
-        "elementType": "labels.text.stroke",
-        "stylers": [
-            { "color": "#fdfdfd" } // Fondo blanco suave para texto
-        ]
-    },
-    {
-        "featureType": "administrative.land_parcel",
-        "elementType": "labels.text.fill",
-        "stylers": [
-            { "color": "#bdbdbd" } // Parcelas en gris claro
-        ]
-    },
-    {
-        "featureType": "poi",
-        "elementType": "geometry",
-        "stylers": [
-            { "color": "#e0e0e0" } // Lugares de interés en gris suave
-        ]
-    },
-    {
-        "featureType": "poi",
-        "elementType": "labels.text.fill",
-        "stylers": [
-            { "color": "#757575" }
-        ]
-    },
-    {
-        "featureType": "poi.park",
-        "elementType": "geometry",
-        "stylers": [
-            { "color": "#d5e8a4" } // Zonas verdes en verde suave
-        ]
-    },
-    {
-        "featureType": "poi.park",
-        "elementType": "labels.text.fill",
-        "stylers": [
-            { "color": "#9e9e9e" }
-        ]
-    },
-    {
-        "featureType": "road",
-        "elementType": "geometry",
-        "stylers": [
-            { "color": "#c6c6c6" } // Calles en blanco puro
-        ]
-    },
-    {
-        "featureType": "road.arterial",
-        "elementType": "geometry",
-        "stylers": [
-            { "color": "#dadada" } // Calles arteriales en gris claro
-        ]
-    },
-    {
-        "featureType": "road.arterial",
-        "elementType": "labels.text.fill",
-        "stylers": [
-            { "color": "#c6c6c6" } // Texto en gris oscuro
-        ]
-    },
-    {
-        "featureType": "road.highway",
-        "elementType": "geometry",
-        "stylers": [
-            { "color": "#c6c6c6" } // Carreteras en gris oscuro
-        ]
-    },
-    {
-        "featureType": "road.highway",
-        "elementType": "labels.text.fill",
-        "stylers": [
-            { "color": "#616161" }
-        ]
-    },
-    {
-        "featureType": "road.local",
-        "elementType": "labels.text.fill",
-        "stylers": [
-            { "color": "#9e9e9e" }
-        ]
-    },
-    {
-        "featureType": "transit.line",
-        "elementType": "geometry",
-        "stylers": [
-            { "color": "#e0e0e0" }
-        ]
-    },
-    {
-        "featureType": "transit.station",
-        "elementType": "geometry",
-        "stylers": [
-            { "color": "#eeeeee" }
-        ]
-    },
-    {
-        "featureType": "water",
-        "elementType": "geometry",
-        "stylers": [
-            { "color": "#a2d5f2" } // Áreas acuáticas en azul claro
-        ]
-    },
-    {
-        "featureType": "water",
-        "elementType": "labels.text.fill",
-        "stylers": [
-            { "color": "#929292" }
-        ]
-    }
-];
-
-
-
 // 🚀 Iniciar el mapa de Google Maps
 function iniciarMapa() {
     mapa = new google.maps.Map(document.getElementById('mapa'), {
@@ -627,3 +492,13 @@ window.addEventListener('load', () => {
     const botonPublicar = document.getElementById('publicar-noticia');
     botonPublicar.addEventListener('click', guardarNoticia);
 });
+
+map.addListener("zoom_changed", () => {
+    const zoom = map.getZoom();
+    const nuevoPeso = calcularGrosorPorZoom(zoom);
+
+    polilineas.forEach(linea => {
+        linea.setOptions({ strokeWeight: nuevoPeso });
+    });
+});
+
