@@ -370,5 +370,3 @@ body {
     border-radius: 6px;
     margin: 10px 0;
 }
-
-tarjeta.classList.add("tarjeta-publicacion", pub.estado);
